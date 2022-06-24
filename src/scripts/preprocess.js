@@ -285,10 +285,10 @@ function filterDataByYearAndCrimeType(data) {
   var filteredData = []
   data.forEach(line => {
     var year = line.DATE.getFullYear()
-    if ( 2015 > year || year > 2021 ) return;
+    if ( 2015 > year || year > 2021 ) return
     filteredData.push({type: line.CATEGORIE, year: year})
   });
-  return filteredData;
+  return filteredData
 }
 
 /**
@@ -300,9 +300,9 @@ function filterDataByYearAndCrimeType(data) {
  * @returns {number} index
  */
 function indexOf(array, property, value){
-  var valueIndex = -1;
+  var valueIndex = -1
   array.forEach((element, index) => {
-    if(element[property] == value) valueIndex = index;
+    if(element[property] == value) valueIndex = index
   });
-  return valueIndex;
+  return valueIndex
 }

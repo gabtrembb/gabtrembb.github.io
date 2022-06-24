@@ -6,6 +6,7 @@ import * as viz1 from './scripts/viz1.js'
 import * as viz2 from './scripts/viz2.js'
 import * as viz3 from './scripts/viz3.js'
 import * as viz4 from './scripts/viz4.js'
+import * as viz5 from './scripts/viz5.js'
 import * as legend from './scripts/legend.js'
 import * as hover from './scripts/hover.js'
 import * as util from './scripts/util.js'
@@ -216,14 +217,24 @@ import * as d3Chromatic from 'd3-scale-chromatic'
    }
 
    /**
-    *   This function builds the graph.
+    *   This function builds the viz5 graph.
     */
     function buildViz5 () {
       helper.removeG()
       const g = helper.generateG(margin)
       helper.appendAxes(g)
 
-      var viz5Data = preproc.getViz5Data(data);
+      var viz5Data = preproc.getViz5Data(data)
+
+      viz2.updateXScale(xBandScale, viz5Data, graphSize.width - padding, util.range)
+      viz5.updateYScale(yLinearScale, viz5Data, graphSize.height)
+
+      viz1.drawXAxis(xBandScale, graphSize.height)
+      viz1.drawYAxis(yLinearScale, graphSize.width)
+
+      viz1.setColorScaleDomain(colorScaleOrdinal, [2015, 2016, 2017, 2018, 2019, 2020, 2021])
+
+      viz5.drawBars(yLinearScale, xBandScale, colorScaleOrdinal, viz5Data)      
    }
 
     window.addEventListener('resize', () => {
