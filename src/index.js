@@ -50,12 +50,19 @@ import * as d3Chromatic from 'd3-scale-chromatic'
     var crimeTypeData = preproc.filterCrimeType(data);
     var viz2Data = preproc.filterSeasons(crimeTypeData, SEASONS);
 
+    console.log(viz2Data)
+
     //viz3 preprocess
     var viz3Data = preproc.filterTimePeriod(crimeTypeData);
     preproc.fillMissingData(viz3Data, categories, timePeriods);
 
     //viz4 preprocess
     var viz4Data = preproc.filterYearlyDataByDate(yearlyData);
+    preproc.sortViz4Data(viz4Data)
+
+    //viz5 preprocess
+
+
     // legend.initGradient(colorScale)
     // legend.initLegendBar()
     // legend.initLegendAxis()

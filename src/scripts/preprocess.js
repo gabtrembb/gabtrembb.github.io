@@ -249,3 +249,10 @@ export function filterYearlyDataByDate(yearlyData) {
   });
   return filteredData
 }
+
+export function sortViz4Data(viz4Data) {
+  viz4Data.forEach(yearlyData => {
+    yearlyData.dateInfos.sort((a, b) => {return a.date - b.date})
+  });
+}
+

@@ -201,6 +201,7 @@ exports.getCategories = getCategories;
 exports.getTimePeriod = getTimePeriod;
 exports.keepChosenSeasons = keepChosenSeasons;
 exports.filterYearlyDataByDate = filterYearlyDataByDate;
+exports.sortViz4Data = sortViz4Data;
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
@@ -512,6 +513,14 @@ function filterYearlyDataByDate(yearlyData) {
     });
   });
   return filteredData;
+}
+
+function sortViz4Data(viz4Data) {
+  viz4Data.forEach(function (yearlyData) {
+    yearlyData.dateInfos.sort(function (a, b) {
+      return a.date - b.date;
+    });
+  });
 }
 },{}],"scripts/viz1.js":[function(require,module,exports) {
 "use strict";
@@ -904,7 +913,7 @@ function drawLines(xScale, yScale, colorScale, viz4Data) {
   });
   d3.select('#graph-g').selectAll().data(viz4Data).join('g').append('path').attr('fill', 'none').attr('stroke', function (d) {
     return colorScale(d.year);
-  }).attr('stroke-width', 1.5).attr('d', function (d) {
+  }).attr('stroke-width', 1).attr('d', function (d) {
     return line(d.dateInfos);
   });
 }
@@ -12102,12 +12111,15 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
     var categories = preproc.getCategories(viz1Data); //viz2 preprocess
 
     var crimeTypeData = preproc.filterCrimeType(data);
-    var viz2Data = preproc.filterSeasons(crimeTypeData, SEASONS); //viz3 preprocess
+    var viz2Data = preproc.filterSeasons(crimeTypeData, SEASONS);
+    console.log(viz2Data); //viz3 preprocess
 
     var viz3Data = preproc.filterTimePeriod(crimeTypeData);
     preproc.fillMissingData(viz3Data, categories, timePeriods); //viz4 preprocess
 
-    var viz4Data = preproc.filterYearlyDataByDate(yearlyData); // legend.initGradient(colorScale)
+    var viz4Data = preproc.filterYearlyDataByDate(yearlyData);
+    preproc.sortViz4Data(viz4Data); //viz5 preprocess
+    // legend.initGradient(colorScale)
     // legend.initLegendBar()
     // legend.initLegendAxis()
     // viz.appendRects(data)
@@ -12294,7 +12306,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "64042" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "54158" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

@@ -50,9 +50,8 @@
   .append('path')
   .attr('fill', 'none')
   .attr('stroke', d => colorScale(d.year))
-  .attr('stroke-width', 1.5)
+  .attr('stroke-width', 1)
   .attr('d', function(d) {return line(d.dateInfos)})
-  
   
 }
 
