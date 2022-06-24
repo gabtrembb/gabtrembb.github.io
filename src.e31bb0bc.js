@@ -29822,6 +29822,59 @@ function drawLines(xScale, yScale, colorScale, viz4Data) {
     return line(d.dateInfos);
   });
 }
+},{}],"scripts/viz5.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.updateYScale = updateYScale;
+exports.drawBars = drawBars;
+
+/**
+ * Updates the domain and range of the scale for the y axis
+ *
+ * @param {*} yScale The scale for the y axis
+ * @param {string[]} neighborhoodNames The names of the neighborhoods
+ * @param {number} height The height of the diagram
+ */
+function updateYScale(yScale, viz5Data, height) {
+  var totals = [];
+  viz5Data.forEach(function (line) {
+    var typeTotal = line['2015'] + line['2016'] + line['2017'] + line['2018'] + line['2019'] + line['2020'] + line['2021'];
+    totals.push(typeTotal);
+  });
+  var maxValue = d3.max(totals);
+  yScale.domain([0, maxValue]).range([height, 0]);
+}
+/**
+ * Draws the bars inside the groups
+ *
+ * @param {*} y The graph's y scale
+ * @param {*} x The x scale to use to position the rectangles in the groups
+ * @param {*} color The color scale for the bars
+ * @param {*} tip The tooltip to show when each bar is hovered and hide when it's not
+ */
+
+
+function drawBars(y, x, color, data) {
+  //todo: 1 seule fonction pr tt graphs? il y a juste les catégories qui changent la donne.
+  var stackedData = d3.stack().keys(['2015', '2016', '2017', '2018', '2019', '2020', '2021'])(data);
+  console.log(data);
+  console.log(stackedData);
+  d3.select('#graph-g').selectAll().data(stackedData).join('g').classed('series', true).attr('fill', function (d) {
+    return color(d.key);
+  }).selectAll('rect').data(function (d) {
+    return d;
+  }).join('rect').attr('width', x.bandwidth()).attr('x', function (d) {
+    return x(d.data.type);
+  }).attr('y', function (d) {
+    return y(d[1]);
+  }).attr('height', function (d) {
+    return y(d[0]) - y(d[1]);
+  }); // .on('mouseover', tip.show)
+  // .on('mouseout', tip.hide)
+}
 },{}],"../node_modules/d3-svg-legend/node_modules/d3-selection/src/namespaces.js":[function(require,module,exports) {
 "use strict";
 
@@ -35647,6 +35700,8 @@ var viz3 = _interopRequireWildcard(require("./scripts/viz3.js"));
 
 var viz4 = _interopRequireWildcard(require("./scripts/viz4.js"));
 
+var viz5 = _interopRequireWildcard(require("./scripts/viz5.js"));
+
 var legend = _interopRequireWildcard(require("./scripts/legend.js"));
 
 var hover = _interopRequireWildcard(require("./scripts/hover.js"));
@@ -35863,7 +35918,7 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
       viz4.drawLines(xTimeScale, yLinearScale, colorScaleOrdinal, viz4Data);
     }
     /**
-     *   This function builds the graph.
+     *   This function builds the viz5 graph.
      */
 
 
@@ -35872,6 +35927,12 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
       var g = helper.generateG(margin);
       helper.appendAxes(g);
       var viz5Data = preproc.getViz5Data(data);
+      viz2.updateXScale(xBandScale, viz5Data, graphSize.width - padding, util.range);
+      viz5.updateYScale(yLinearScale, viz5Data, graphSize.height);
+      viz1.drawXAxis(xBandScale, graphSize.height);
+      viz1.drawYAxis(yLinearScale, graphSize.width);
+      viz1.setColorScaleDomain(colorScaleOrdinal, [2015, 2016, 2017, 2018, 2019, 2020, 2021]);
+      viz5.drawBars(yLinearScale, xBandScale, colorScaleOrdinal, viz5Data);
     }
 
     window.addEventListener('resize', function () {
@@ -35879,7 +35940,7 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
     });
   });
 })(d3);
-},{"./scripts/helper.js":"scripts/helper.js","./scripts/preprocess.js":"scripts/preprocess.js","./scripts/viz1.js":"scripts/viz1.js","./scripts/viz2.js":"scripts/viz2.js","./scripts/viz3.js":"scripts/viz3.js","./scripts/viz4.js":"scripts/viz4.js","./scripts/legend.js":"scripts/legend.js","./scripts/hover.js":"scripts/hover.js","./scripts/util.js":"scripts/util.js","d3-scale-chromatic":"../node_modules/d3-scale-chromatic/src/index.js"}],"../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+},{"./scripts/helper.js":"scripts/helper.js","./scripts/preprocess.js":"scripts/preprocess.js","./scripts/viz1.js":"scripts/viz1.js","./scripts/viz2.js":"scripts/viz2.js","./scripts/viz3.js":"scripts/viz3.js","./scripts/viz4.js":"scripts/viz4.js","./scripts/viz5.js":"scripts/viz5.js","./scripts/legend.js":"scripts/legend.js","./scripts/hover.js":"scripts/hover.js","./scripts/util.js":"scripts/util.js","d3-scale-chromatic":"../node_modules/d3-scale-chromatic/src/index.js"}],"../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -35907,7 +35968,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "57508" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "62128" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
