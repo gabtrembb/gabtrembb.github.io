@@ -488,7 +488,29 @@ function keepChosenSeasons(viz2Data, chosenSeasons, seasons) {
 
 function filterYearlyDataByDate(yearlyData) {
   var filteredData = [];
-  yearlyData.forEach(function (yearData) {});
+  yearlyData.forEach(function (yearData) {
+    filteredData.push({
+      year: yearData.year,
+      dateInfos: []
+    });
+    yearData.crimes.forEach(function (line) {
+      var date = new Date(0, line.DATE.getMonth(), line.DATE.getDate());
+      var dateInfoIndex = -1;
+      filteredData[filteredData.length - 1].dateInfos.forEach(function (dateInfo, index) {
+        if (dateInfo.date.getMonth() == date.getMonth() && dateInfo.date.getDate() == date.getDate()) dateInfoIndex = index;
+      });
+
+      if (dateInfoIndex == -1) {
+        filteredData[filteredData.length - 1].dateInfos.push({
+          date: date,
+          count: 0
+        });
+        dateInfoIndex = filteredData[filteredData.length - 1].dateInfos.length - 1;
+      }
+
+      filteredData[filteredData.length - 1].dateInfos[dateInfoIndex].count++;
+    });
+  });
   return filteredData;
 }
 },{}],"scripts/viz1.js":[function(require,module,exports) {
@@ -810,6 +832,58 @@ function updateRects(xScale, yScale, colorScale, viz3Data) {
   }).attr('width', xScale.bandwidth()).attr('height', yScale.bandwidth()).style('fill', function (d) {
     return colorScale(d.count);
   });
+}
+},{}],"scripts/viz4.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.updateXScale = updateXScale;
+exports.updateYScale = updateYScale;
+exports.drawXAxis = drawXAxis;
+
+/**
+ * Updates the domain and range of the scale for the x axis
+ *
+ * @param {*} xScale The scale for the x axis
+ * @param {object[]} data The data to be used
+ * @param {number} width The width of the diagram
+ * @param {Function} range A utilitary funtion that could be useful to generate a list of numbers in a range
+ */
+function updateXScale(xScale, viz4Data, width) {
+  var min = new Date(0, 0, 1);
+  var max = new Date(0, 11, 31);
+  xScale.domain([min, max]).range([0, width]);
+}
+/**
+ * Updates the domain and range of the scale for the y axis
+ *
+ * @param {*} yScale The scale for the y axis
+ * @param {string[]} neighborhoodNames The names of the neighborhoods
+ * @param {number} height The height of the diagram
+ */
+
+
+function updateYScale(yScale, viz4Data, height) {
+  var maxValue = d3.max(viz4Data, function (d) {
+    return d3.max(d.dateInfos, function (dd) {
+      return dd.count;
+    });
+  });
+  yScale.domain([0, maxValue]).range([height, 0]);
+}
+/**
+ *  Draws the X axis at the top of the diagram.
+ *
+ *  @param {*} xScale The scale to use to draw the axis
+ */
+
+
+function drawXAxis(xScale, height, MONTH_NAMES) {
+  d3.select('.x.axis').attr('transform', 'translate( 0, ' + height + ')').call(d3.axisBottom(xScale).tickFormat(function (x) {
+    return MONTH_NAMES[x.getMonth()];
+  }));
 }
 },{}],"../node_modules/d3-svg-legend/node_modules/d3-selection/src/namespaces.js":[function(require,module,exports) {
 "use strict";
@@ -11946,6 +12020,8 @@ var viz2 = _interopRequireWildcard(require("./scripts/viz2.js"));
 
 var viz3 = _interopRequireWildcard(require("./scripts/viz3.js"));
 
+var viz4 = _interopRequireWildcard(require("./scripts/viz4.js"));
+
 var legend = _interopRequireWildcard(require("./scripts/legend.js"));
 
 var hover = _interopRequireWildcard(require("./scripts/hover.js"));
@@ -11980,6 +12056,7 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
     Summer: "Été",
     Autumn: "Automne"
   };
+  var MONTH_NAMES = ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"];
   var chosenSeasons = {
     Hiver: true,
     Printemps: true,
@@ -11988,6 +12065,7 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
   }; //todo: put false on all
 
   var xBandScale = d3.scaleBand().padding(0.25).paddingInner(0.25);
+  var xTimeScale = d3.scaleTime();
   var yBandScale = d3.scaleBand().padding(0.2); //const xSubgroupScale = d3.scaleBand().padding(0.05) sert a rien?
 
   var yLinearScale = d3.scaleLinear();
@@ -12150,7 +12228,10 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
       helper.removeG();
       var g = helper.generateG(margin);
       helper.appendAxes(g);
-      console.log("viz4");
+      viz4.updateXScale(xTimeScale, viz4Data, graphSize.width);
+      viz4.updateYScale(yLinearScale, viz4Data, graphSize.height);
+      viz4.drawXAxis(xTimeScale, graphSize.height, MONTH_NAMES);
+      viz1.drawYAxis(yLinearScale, graphSize.width);
     }
 
     window.addEventListener('resize', function () {
@@ -12158,7 +12239,7 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
     });
   });
 })(d3);
-},{"./scripts/helper.js":"scripts/helper.js","./scripts/preprocess.js":"scripts/preprocess.js","./scripts/viz1.js":"scripts/viz1.js","./scripts/viz2.js":"scripts/viz2.js","./scripts/viz3.js":"scripts/viz3.js","./scripts/legend.js":"scripts/legend.js","./scripts/hover.js":"scripts/hover.js","./scripts/util.js":"scripts/util.js","d3-scale-chromatic":"../node_modules/d3-scale-chromatic/src/index.js"}],"../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+},{"./scripts/helper.js":"scripts/helper.js","./scripts/preprocess.js":"scripts/preprocess.js","./scripts/viz1.js":"scripts/viz1.js","./scripts/viz2.js":"scripts/viz2.js","./scripts/viz3.js":"scripts/viz3.js","./scripts/viz4.js":"scripts/viz4.js","./scripts/legend.js":"scripts/legend.js","./scripts/hover.js":"scripts/hover.js","./scripts/util.js":"scripts/util.js","d3-scale-chromatic":"../node_modules/d3-scale-chromatic/src/index.js"}],"../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -12186,7 +12267,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "65386" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "49408" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
