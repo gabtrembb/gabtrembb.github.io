@@ -5,6 +5,7 @@ import * as preproc from './scripts/preprocess.js'
 import * as viz1 from './scripts/viz1.js'
 import * as viz2 from './scripts/viz2.js'
 import * as viz3 from './scripts/viz3.js'
+import * as viz4 from './scripts/viz4.js'
 import * as legend from './scripts/legend.js'
 import * as hover from './scripts/hover.js'
 import * as util from './scripts/util.js'
@@ -25,10 +26,12 @@ import * as d3Chromatic from 'd3-scale-chromatic'
   const margin = { top: 35, right: 200, bottom: 35, left: 200 }
   const padding = 200
   const SEASONS = {Winter: "Hiver", Spring: "Printemps", Summer: "Été", Autumn: "Automne"}
+  const MONTH_NAMES = ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"]
 
   var chosenSeasons = {Hiver: true, Printemps: true, Été: false, Automne: true} //todo: put false on all
 
   const xBandScale = d3.scaleBand().padding(0.25).paddingInner(0.25)
+  const xTimeScale = d3.scaleTime()
   const yBandScale = d3.scaleBand().padding(0.2)
   //const xSubgroupScale = d3.scaleBand().padding(0.05) sert a rien?
   const yLinearScale = d3.scaleLinear()
@@ -199,7 +202,11 @@ import * as d3Chromatic from 'd3-scale-chromatic'
       const g = helper.generateG(margin)
       helper.appendAxes(g)
 
-      console.log(viz4Data)
+      viz4.updateXScale(xTimeScale, viz4Data, graphSize.width)
+      viz4.updateYScale(yLinearScale, viz4Data, graphSize.height)
+
+      viz4.drawXAxis(xTimeScale, graphSize.height, MONTH_NAMES)
+      viz1.drawYAxis(yLinearScale, graphSize.width)
    }
 
     window.addEventListener('resize', () => {
