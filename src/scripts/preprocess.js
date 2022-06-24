@@ -1,3 +1,5 @@
+import { index } from "d3";
+
 const MONTHS = {January: 1, March: 3, June: 6, September: 9, December: 12}
 /**
  * Filters the data by the given years.
@@ -186,19 +188,15 @@ export function filterCrimeByMomentOfDay(data) {
   return filteredData
 }
 
-export function getCategories(viz1Data) {
-  var crimeTypes = [];
-  viz1Data.forEach(yearlyData => {
-    yearlyData.crimes.forEach((count, category) => {
-      if(!crimeTypes.includes(category)){
-        crimeTypes.push(category)
-      }
-    });
+export function getTypes(data) {
+  var types = []
+  data.forEach(line => {
+    if(!types.includes(line.CATEGORIE)) types.push(line.CATEGORIE)
   });
-  return crimeTypes;
+  return types;
 }
 
-export function getTimePeriod(data) {
+export function getTimePeriods(data) {
   var timePeriods = [];
   data.forEach(line => {
     if(!timePeriods.includes(line.QUART)) timePeriods.push(line.QUART)
@@ -255,4 +253,56 @@ export function sortViz4Data(viz4Data) {
     yearlyData.dateInfos.sort((a, b) => {return a.date - b.date})
   });
 }
+////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+/**
+ * Get the viz5 data properly formated.
+ *
+ * @param {object[]} data The data to filter (must be the csv data unmodified)
+ * @returns {object[]} The filtered data in this form: [{type: string, 2015: num, 2016: num, 2017: num, 2018: num, 2019: num, 2020: num, 2021: num}, ...]
+ */
+export function getViz5Data(data) {
+  var crimeTypeAndYearData = filterDataByYearAndCrimeType(data)
+  var viz5Data = []
+  crimeTypeAndYearData.forEach(crime => {
+    var index = indexOf(viz5Data, 'type', crime.type)
+    if(index == -1){
+      viz5Data.push({type: crime.type, 2015: 0, 2016: 0, 2017: 0, 2018: 0, 2019: 0, 2020: 0, 2021: 0})
+      index = viz5Data.length -1
+    }
+    viz5Data[index][crime.year]++
+  });
+  return viz5Data
+}
+
+/**
+ * Get filtered data with crime type and year.
+ *
+ * @param {object[]} data The data to filter (must be the csv data unmodified)
+ * @returns {object[]} The filtered data in this form: [{type: string, year: num}, ...]
+ */
+function filterDataByYearAndCrimeType(data) {
+  var filteredData = []
+  data.forEach(line => {
+    var year = line.DATE.getFullYear()
+    if ( 2015 > year || year > 2021 ) return;
+    filteredData.push({type: line.CATEGORIE, year: year})
+  });
+  return filteredData;
+}
+
+/**
+ * Get index of a value in an object array.
+ *
+ * @param {object[]} array array to search in
+ * @param {string} property property that must have specific value
+ * @param {any} value value of the property we're looking for
+ * @returns {number} index
+ */
+function indexOf(array, property, value){
+  var valueIndex = -1;
+  array.forEach((element, index) => {
+    if(element[property] == value) valueIndex = index;
+  });
+  return valueIndex;
+}

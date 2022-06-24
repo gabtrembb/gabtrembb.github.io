@@ -39,29 +39,25 @@ import * as d3Chromatic from 'd3-scale-chromatic'
   const colorScaleSequential = d3.scaleSequential(d3Chromatic.interpolateYlGnBu)
 
   d3.csv('./interventionscitoyendo.csv', d3.autoType).then(function (data) {
-    const timePeriods = preproc.getTimePeriod(data);
+    const timePeriods = preproc.getTimePeriods(data);
+    const types = preproc.getTypes(data);
 
     //viz1 preprocess
     var yearlyData = preproc.filterYears(data);
     var viz1Data = preproc.filterYearlyDataByCrimeType(yearlyData);
-    const categories = preproc.getCategories(viz1Data)
+    
 
     //viz2 preprocess
     var crimeTypeData = preproc.filterCrimeType(data);
     var viz2Data = preproc.filterSeasons(crimeTypeData, SEASONS);
 
-    console.log(viz2Data)
-
     //viz3 preprocess
     var viz3Data = preproc.filterTimePeriod(crimeTypeData);
-    preproc.fillMissingData(viz3Data, categories, timePeriods);
+    preproc.fillMissingData(viz3Data, types, timePeriods);
 
     //viz4 preprocess
     var viz4Data = preproc.filterYearlyDataByDate(yearlyData);
     preproc.sortViz4Data(viz4Data)
-
-    //viz5 preprocess
-
 
     // legend.initGradient(colorScale)
     // legend.initLegendBar()
@@ -108,7 +104,7 @@ import * as d3Chromatic from 'd3-scale-chromatic'
      *   This function handles the buttons click.
      */
      function setClickHandlerViz5 () {
-      d3.select('#viz-button5').on('click', () => { build() } )
+      d3.select('#viz-button5').on('click', () => { buildViz5() } )
     }
 
     /**
@@ -139,13 +135,12 @@ import * as d3Chromatic from 'd3-scale-chromatic'
       helper.appendAxes(g)
 
       viz1.updateXScale(xBandScale, viz1Data, graphSize.width - padding, util.range)
-      //helper.updateXSubgroupScale(xSubgroupScale, categories, xBandScale) todo: sert a rien?
       viz1.updateYScale(yLinearScale, viz1Data, graphSize.height)
 
       viz1.drawXAxis(xBandScale, graphSize.height)
       viz1.drawYAxis(yLinearScale, graphSize.width)
 
-      viz1.setColorScaleDomain(colorScaleOrdinal, categories)
+      viz1.setColorScaleDomain(colorScaleOrdinal, types)
 
       viz1.createGroups(viz1Data)
       viz1.drawBars(yLinearScale, xBandScale, colorScaleOrdinal)
@@ -191,7 +186,7 @@ import * as d3Chromatic from 'd3-scale-chromatic'
       helper.appendAxes(g)
 
       viz3.updateXScale(xBandScale, timePeriods, graphSize.width, util.range)
-      viz3.updateYScale(yBandScale, categories, graphSize.height)
+      viz3.updateYScale(yBandScale, types, graphSize.height)
 
       viz3.drawXAxis(xBandScale, graphSize.height)
       viz3.drawYAxis(yBandScale, graphSize.width)
@@ -218,6 +213,17 @@ import * as d3Chromatic from 'd3-scale-chromatic'
       viz1.setColorScaleDomain(colorScaleOrdinal, viz4Data.map(x => x.year))
 
       viz4.drawLines(xTimeScale, yLinearScale, colorScaleOrdinal, viz4Data)
+   }
+
+   /**
+    *   This function builds the graph.
+    */
+    function buildViz5 () {
+      helper.removeG()
+      const g = helper.generateG(margin)
+      helper.appendAxes(g)
+
+      var viz5Data = preproc.getViz5Data(data);
    }
 
     window.addEventListener('resize', () => {
