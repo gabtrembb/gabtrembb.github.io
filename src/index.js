@@ -199,7 +199,7 @@ import * as d3Chromatic from 'd3-scale-chromatic'
       const g = helper.generateG(margin)
       helper.appendAxes(g)
 
-      console.log("viz4")
+      console.log(viz4Data)
    }
 
     window.addEventListener('resize', () => {

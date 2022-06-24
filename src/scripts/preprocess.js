@@ -231,7 +231,21 @@ export function keepChosenSeasons(viz2Data, chosenSeasons, seasons) {
 export function filterYearlyDataByDate(yearlyData) {
   var filteredData = []
   yearlyData.forEach(yearData => {
-    
-  })
+    filteredData.push({year: yearData.year, dateInfos: []})
+    yearData.crimes.forEach(line => {
+      var date = line.DATE.getDate().toString() + '-' + (line.DATE.getMonth()+1).toString()
+
+      var dateInfoIndex = -1
+      filteredData[filteredData.length-1].dateInfos.forEach((dateInfo, index) => {
+        if(dateInfo.date == date)dateInfoIndex = index;
+      });
+      if(dateInfoIndex == -1){
+        filteredData[filteredData.length-1].dateInfos.push({date: date, count: 0})
+        dateInfoIndex = filteredData[filteredData.length-1].dateInfos.length-1
+      }
+
+      filteredData[filteredData.length-1].dateInfos[dateInfoIndex].count++
+    });
+  });
   return filteredData
 }

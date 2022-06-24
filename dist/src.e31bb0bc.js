@@ -488,7 +488,29 @@ function keepChosenSeasons(viz2Data, chosenSeasons, seasons) {
 
 function filterYearlyDataByDate(yearlyData) {
   var filteredData = [];
-  yearlyData.forEach(function (yearData) {});
+  yearlyData.forEach(function (yearData) {
+    filteredData.push({
+      year: yearData.year,
+      dateInfos: []
+    });
+    yearData.crimes.forEach(function (line) {
+      var date = line.DATE.getDate().toString() + '-' + (line.DATE.getMonth() + 1).toString();
+      var dateInfoIndex = -1;
+      filteredData[filteredData.length - 1].dateInfos.forEach(function (dateInfo, index) {
+        if (dateInfo.date == date) dateInfoIndex = index;
+      });
+
+      if (dateInfoIndex == -1) {
+        filteredData[filteredData.length - 1].dateInfos.push({
+          date: date,
+          count: 0
+        });
+        dateInfoIndex = filteredData[filteredData.length - 1].dateInfos.length - 1;
+      }
+
+      filteredData[filteredData.length - 1].dateInfos[dateInfoIndex].count++;
+    });
+  });
   return filteredData;
 }
 },{}],"scripts/viz1.js":[function(require,module,exports) {
@@ -12150,7 +12172,7 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
       helper.removeG();
       var g = helper.generateG(margin);
       helper.appendAxes(g);
-      console.log("viz4");
+      console.log(viz4Data);
     }
 
     window.addEventListener('resize', function () {
@@ -12186,7 +12208,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "65386" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "49408" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
