@@ -842,6 +842,7 @@ Object.defineProperty(exports, "__esModule", {
 exports.updateXScale = updateXScale;
 exports.updateYScale = updateYScale;
 exports.drawXAxis = drawXAxis;
+exports.drawLines = drawLines;
 
 /**
  * Updates the domain and range of the scale for the x axis
@@ -884,6 +885,28 @@ function drawXAxis(xScale, height, MONTH_NAMES) {
   d3.select('.x.axis').attr('transform', 'translate( 0, ' + height + ')').call(d3.axisBottom(xScale).tickFormat(function (x) {
     return MONTH_NAMES[x.getMonth()];
   }));
+}
+/**
+ * After the rectangles have been appended, this function dictates
+ * their position, size and fill color.
+ *
+ * @param {*} xScale The x scale used to position the rectangles
+ * @param {*} yScale The y scale used to position the rectangles
+ * @param {*} colorScale The color scale used to set the rectangles' colors
+ */
+
+
+function drawLines(xScale, yScale, colorScale, viz4Data) {
+  var line = d3.line().x(function (d) {
+    return xScale(d.date);
+  }).y(function (d) {
+    return yScale(d.count);
+  });
+  d3.select('#graph-g').selectAll().data(viz4Data).join('g').append('path').attr('fill', 'none').attr('stroke', function (d) {
+    return colorScale(d.year);
+  }).attr('stroke-width', 1.5).attr('d', function (d) {
+    return line(d.dateInfos);
+  });
 }
 },{}],"../node_modules/d3-svg-legend/node_modules/d3-selection/src/namespaces.js":[function(require,module,exports) {
 "use strict";
@@ -12232,6 +12255,10 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
       viz4.updateYScale(yLinearScale, viz4Data, graphSize.height);
       viz4.drawXAxis(xTimeScale, graphSize.height, MONTH_NAMES);
       viz1.drawYAxis(yLinearScale, graphSize.width);
+      viz1.setColorScaleDomain(colorScaleOrdinal, viz4Data.map(function (x) {
+        return x.year;
+      }));
+      viz4.drawLines(xTimeScale, yLinearScale, colorScaleOrdinal, viz4Data);
     }
 
     window.addEventListener('resize', function () {
@@ -12267,7 +12294,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "49408" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "64042" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

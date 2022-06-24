@@ -207,6 +207,10 @@ import * as d3Chromatic from 'd3-scale-chromatic'
 
       viz4.drawXAxis(xTimeScale, graphSize.height, MONTH_NAMES)
       viz1.drawYAxis(yLinearScale, graphSize.width)
+
+      viz1.setColorScaleDomain(colorScaleOrdinal, viz4Data.map(x => x.year))
+
+      viz4.drawLines(xTimeScale, yLinearScale, colorScaleOrdinal, viz4Data)
    }
 
     window.addEventListener('resize', () => {

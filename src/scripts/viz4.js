@@ -33,4 +33,27 @@
   d3.select('.x.axis').attr('transform', 'translate( 0, ' + height + ')').call(d3.axisBottom(xScale).tickFormat(x => MONTH_NAMES[x.getMonth()]))
 }
 
+/**
+ * After the rectangles have been appended, this function dictates
+ * their position, size and fill color.
+ *
+ * @param {*} xScale The x scale used to position the rectangles
+ * @param {*} yScale The y scale used to position the rectangles
+ * @param {*} colorScale The color scale used to set the rectangles' colors
+ */
+ export function drawLines (xScale, yScale, colorScale, viz4Data) {
+  const line = d3.line()
+    .x(function(d){return xScale(d.date)})
+    .y(function(d){return yScale(d.count)})
+
+  d3.select('#graph-g').selectAll().data(viz4Data).join('g')
+  .append('path')
+  .attr('fill', 'none')
+  .attr('stroke', d => colorScale(d.year))
+  .attr('stroke-width', 1.5)
+  .attr('d', function(d) {return line(d.dateInfos)})
+  
+  
+}
+
 
