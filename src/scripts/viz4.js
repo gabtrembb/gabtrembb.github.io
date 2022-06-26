@@ -34,16 +34,6 @@
 }
 
 /**
- * Draws the Y axis to the right of the diagram.
- *
- * @param {*} yScale The scale to use to draw the axis
- * @param {number} width The width of the graphic
- */
- export function drawYAxis (yScale, width) {
-  d3.select('.y.axis').call(d3.axisLeft(yScale).tickFormat(x => x.toString()))
-}
-
-/**
  * After the rectangles have been appended, this function dictates
  * their position, size and fill color.
  *
