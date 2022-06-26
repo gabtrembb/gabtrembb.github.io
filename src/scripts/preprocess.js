@@ -1,6 +1,47 @@
 import { index } from "d3";
 
 const MONTHS = {January: 1, March: 3, June: 6, September: 9, December: 12}
+
+const CRIMENAMES = {
+  'Vol de v�hicule � moteur': 'Vol de véhicule à moteur',
+  'M�fait': 'Méfait',
+  'Vols qualifi�s': 'Vols qualifiés',
+  'Introduction': 'Introduction', 
+  'Vol dans / sur v�hicule � moteur': 'Vol dans / sur véhicule à moteur', 
+  'Infractions entrainant la mort': 'Infractions entrainant la mort'
+}
+
+export function filterCrimeTypeName(data) {
+  data.forEach(crime => {
+    switch(crime.CATEGORIE) {
+      case 'Vol de v�hicule � moteur':
+        crime.CATEGORIE = CRIMENAMES['Vol de v�hicule � moteur'];
+        break;
+
+      case 'M�fait':
+        crime.CATEGORIE = CRIMENAMES['M�fait'];
+        break;
+
+      case 'Vols qualifi�s':
+        crime.CATEGORIE = CRIMENAMES['Vols qualifi�s'];
+        break;
+
+      case 'Vol dans / sur v�hicule � moteur':
+        crime.CATEGORIE = CRIMENAMES['Vol dans / sur v�hicule � moteur'];
+        break;
+
+      case 'Introduction':
+          crime.CATEGORIE = CRIMENAMES['Introduction'];
+          break;
+
+      case 'Infractions entrainant la mort':
+          crime.CATEGORIE = CRIMENAMES['Infractions entrainant la mort'];
+          break;
+    }
+  })
+}
+
+
 /**
  * Filters the data by the given years.
  *
@@ -35,11 +76,11 @@ export function getViz1Data(data) {
     var index = indexOf(viz1Data, 'year', crime.year)
     if(index == -1){
       viz1Data.push({year: crime.year, 
-        'Vol de v�hicule � moteur': 0, 
-        'M�fait': 0, 
-        'Vols qualifi�s': 0, 
+        'Vol de véhicule à moteur': 0, 
+        'Méfait': 0, 
+        'Vols qualifiés': 0, 
         'Introduction': 0, 
-        'Vol dans / sur v�hicule � moteur': 0, 
+        'Vol dans / sur véhicule à moteur': 0, 
         'Infractions entrainant la mort': 0
       })
       index = viz1Data.length -1

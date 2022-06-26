@@ -30,11 +30,11 @@ export function updateXScale (xScale, viz1Data, width) {
 export function updateYScale (yScale, viz1Data, height) {
   var totals = [];
   viz1Data.forEach(yearlyData => {
-    var yearlyTotal = yearlyData['Vol de v�hicule � moteur'] +
-                      yearlyData['M�fait'] +
-                      yearlyData['Vols qualifi�s'] +
+    var yearlyTotal = yearlyData['Vol de véhicule à moteur'] +
+                      yearlyData['Méfait'] +
+                      yearlyData['Vols qualifiés'] +
                       yearlyData['Introduction'] +
-                      yearlyData['Vol dans / sur v�hicule � moteur'] +
+                      yearlyData['Vol dans / sur véhicule à moteur'] +
                       yearlyData['Infractions entrainant la mort']
     totals.push(yearlyTotal)
   });
@@ -71,11 +71,11 @@ export function drawYAxis (yScale, width) {
  */
  export function drawBars (y, x, color, viz1Data) {
   var stackedData = d3.stack().keys([
-    'Vol de v�hicule � moteur', 
-    'M�fait', 
-    'Vols qualifi�s', 
+    'Vol de véhicule à moteur', 
+    'Méfait', 
+    'Vols qualifiés', 
     'Introduction', 
-    'Vol dans / sur v�hicule � moteur', 
+    'Vol dans / sur véhicule à moteur', 
     'Infractions entrainant la mort'
   ])(viz1Data)
   d3.select('#graph-g')

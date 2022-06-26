@@ -40,9 +40,10 @@ import * as d3Chromatic from 'd3-scale-chromatic'
   const colorScaleSequential = d3.scaleSequential(d3Chromatic.interpolateYlGnBu)
 
   d3.csv('./interventionscitoyendo.csv', d3.autoType).then(function (data) {
+    preproc.filterCrimeTypeName(data);
     const timePeriods = preproc.getTimePeriods(data);
     const types = preproc.getTypes(data);
-
+    
     //viz1 preprocess
     var yearlyData = preproc.filterYears(data);
     var viz1Data = preproc.getViz1Data(data);
