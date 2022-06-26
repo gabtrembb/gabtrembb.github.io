@@ -179,8 +179,8 @@ function appendAxes(g) {
  */
 
 
-function appendTitle(g, width, title) {
-  g.append('text').attr('class', 'graph-title').attr('text-anchor', 'middle').style('dominant-baseline', 'central').attr('x', width / 2).text(title);
+function appendTitle(g, posX, posY, title) {
+  g.append('text').attr('class', 'graph-title').attr('text-anchor', 'middle').style('dominant-baseline', 'central').attr('x', posX).attr('y', posY).text(title);
 }
 },{}],"scripts/preprocess.js":[function(require,module,exports) {
 "use strict";
@@ -12337,7 +12337,7 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
       helper.removeG();
       var g = helper.generateG(margin);
       helper.appendAxes(g);
-      helper.appendTitle(g, graphSize.width, 'Tendances du taux de criminalité par année');
+      helper.appendTitle(g, (graphSize.width - padding) / 2, -20, 'Tendances du taux de criminalité par année');
       var viz1Data = preproc.getViz1Data(data);
       viz1.updateXScale(xBandScale, viz1Data, graphSize.width - padding);
       viz1.updateYScale(yLinearScale, viz1Data, graphSize.height);
@@ -12349,7 +12349,7 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
       document.getElementById('season-buttons-container').style.display = 'none';
     }
     /**
-    *   This function builds the graph.
+    *   This function builds the viz2 graph.
     */
 
 
@@ -12358,7 +12358,7 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
       helper.removeG();
       var g = helper.generateG(margin);
       helper.appendAxes(g);
-      helper.appendTitle(g, graphSize.width, "Tendances du taux de criminalité par catégorie selon la période de l'année");
+      helper.appendTitle(g, (graphSize.width - padding) / 2, -20, "Tendances du taux de criminalité par catégorie selon la période de l'année");
       var viz2Data = preproc.getViz2Data(data, SEASONS);
       viz2.updateXScale(xBandScale, viz2Data, graphSize.width - padding, util.range);
       viz2.updateYScale(yLinearScale, viz2Data, graphSize.height, SEASONS);
@@ -12371,16 +12371,21 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
       document.getElementById('season-buttons-container').style.display = 'inline';
     }
     /**
-     *   This function builds the graph.
+     *   This function builds the viz3 graph.
      */
 
 
     function buildViz3() {
       currentViz = 3;
       helper.removeG();
-      var g = helper.generateG(margin);
+      var g = helper.generateG({
+        top: margin.top + 30,
+        right: margin.right,
+        left: margin.left,
+        bottom: margin.bottom
+      });
       helper.appendAxes(g);
-      helper.appendTitle(g, graphSize.width, "Taux et types de crimes par période");
+      helper.appendTitle(g, graphSize.width / 2, -50, "Taux et types de crimes par période");
       var viz3Data = preproc.getViz3Data(data, TYPES, TIME_PERIODS);
       viz3.updateXScale(xBandScale, TIME_PERIODS, graphSize.width, util.range);
       viz3.updateYScale(yBandScale, TYPES, graphSize.height);
@@ -12391,7 +12396,7 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
       document.getElementById('season-buttons-container').style.display = 'none';
     }
     /**
-     *   This function builds the graph.
+     *   This function builds the viz4 graph.
      */
 
 
@@ -12400,7 +12405,7 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
       helper.removeG();
       var g = helper.generateG(margin);
       helper.appendAxes(g);
-      helper.appendTitle(g, graphSize.width, "Taux de criminalité annuel");
+      helper.appendTitle(g, graphSize.width / 2, -20, "Taux de criminalité annuel");
       var viz4Data = preproc.getViz4Data(data);
       viz4.updateXScale(xTimeScale, viz4Data, graphSize.width);
       viz4.updateYScale(yLinearScale, viz4Data, graphSize.height);
@@ -12422,7 +12427,7 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
       helper.removeG();
       var g = helper.generateG(margin);
       helper.appendAxes(g);
-      helper.appendTitle(g, graphSize.width, "Tendances du taux de criminalité par catégorie");
+      helper.appendTitle(g, (graphSize.width - padding) / 2, -20, "Tendances du taux de criminalité par catégorie");
       var viz5Data = preproc.getViz5Data(data);
       viz2.updateXScale(xBandScale, viz5Data, graphSize.width - padding, util.range);
       viz5.updateYScale(yLinearScale, viz5Data, graphSize.height);

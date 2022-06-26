@@ -58,11 +58,12 @@ export function appendAxes (g) {
  * @param {*} g The d3 Selection of the graph's g SVG element
  * @param {string} title The graph's title
  */
- export function appendTitle (g, width, title) {
+ export function appendTitle (g, posX, posY, title) {
   g.append('text')
     .attr('class', 'graph-title')
     .attr('text-anchor', 'middle')
     .style('dominant-baseline', 'central')
-    .attr('x', width/2)
+    .attr('x', posX)
+    .attr('y', posY)
     .text(title)
 }

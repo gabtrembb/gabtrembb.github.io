@@ -192,7 +192,7 @@ import * as d3Chromatic from 'd3-scale-chromatic'
       helper.removeG()
       const g = helper.generateG(margin)
       helper.appendAxes(g)
-      helper.appendTitle(g, graphSize.width, 'Tendances du taux de criminalité par année')
+      helper.appendTitle(g, (graphSize.width-padding)/2, -20, 'Tendances du taux de criminalité par année')
 
       const viz1Data = preproc.getViz1Data(data)
 
@@ -211,14 +211,14 @@ import * as d3Chromatic from 'd3-scale-chromatic'
       document.getElementById('season-buttons-container').style.display = 'none'
     }
     /**
-    *   This function builds the graph.
+    *   This function builds the viz2 graph.
     */
    function buildViz2 () {
       currentViz = 2
       helper.removeG()
       const g = helper.generateG(margin)
       helper.appendAxes(g)
-      helper.appendTitle(g, graphSize.width, "Tendances du taux de criminalité par catégorie selon la période de l'année")
+      helper.appendTitle(g, (graphSize.width-padding)/2, -20, "Tendances du taux de criminalité par catégorie selon la période de l'année")
 
       var viz2Data = preproc.getViz2Data(data, SEASONS)
 
@@ -238,14 +238,14 @@ import * as d3Chromatic from 'd3-scale-chromatic'
       document.getElementById('season-buttons-container').style.display = 'inline'
    }
    /**
-    *   This function builds the graph.
+    *   This function builds the viz3 graph.
     */
     function buildViz3 () {
       currentViz = 3
       helper.removeG()
-      const g = helper.generateG(margin)
+      const g = helper.generateG({top: margin.top + 30, right: margin.right, left: margin.left, bottom: margin.bottom})
       helper.appendAxes(g)
-      helper.appendTitle(g, graphSize.width, "Taux et types de crimes par période")
+      helper.appendTitle(g, (graphSize.width)/2, -50, "Taux et types de crimes par période")
 
       var viz3Data = preproc.getViz3Data(data, TYPES, TIME_PERIODS)
 
@@ -263,14 +263,14 @@ import * as d3Chromatic from 'd3-scale-chromatic'
    }
 
    /**
-    *   This function builds the graph.
+    *   This function builds the viz4 graph.
     */
     function buildViz4 () {
       currentViz = 4
       helper.removeG()
       const g = helper.generateG(margin)
       helper.appendAxes(g)
-      helper.appendTitle(g, graphSize.width, "Taux de criminalité annuel")
+      helper.appendTitle(g, graphSize.width/2, -20, "Taux de criminalité annuel")
 
       var viz4Data = preproc.getViz4Data(data)
 
@@ -295,7 +295,7 @@ import * as d3Chromatic from 'd3-scale-chromatic'
       helper.removeG()
       const g = helper.generateG(margin)
       helper.appendAxes(g)
-      helper.appendTitle(g, graphSize.width, "Tendances du taux de criminalité par catégorie")
+      helper.appendTitle(g, (graphSize.width-padding)/2, -20, "Tendances du taux de criminalité par catégorie")
 
       var viz5Data = preproc.getViz5Data(data)
 
