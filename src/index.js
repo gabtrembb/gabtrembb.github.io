@@ -26,10 +26,12 @@ import * as d3Chromatic from 'd3-scale-chromatic'
 
   const margin = { top: 35, right: 200, bottom: 35, left: 200 }
   const padding = 200
+
   const SEASONS = {Winter: "Hiver", Spring: "Printemps", Summer: "Été", Autumn: "Automne"}
   const MONTH_NAMES = ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"]
 
   var chosenSeasons = {Hiver: true, Printemps: true, Été: false, Automne: true} //todo: put false on all
+  var currentViz = 1
 
   const xBandScale = d3.scaleBand().padding(0.25).paddingInner(0.25)
   const xTimeScale = d3.scaleTime()
@@ -40,13 +42,12 @@ import * as d3Chromatic from 'd3-scale-chromatic'
   const colorScaleSequential = d3.scaleSequential(d3Chromatic.interpolateYlGnBu)
 
   d3.csv('./interventionscitoyendo.csv', d3.autoType).then(function (data) {
-    const timePeriods = preproc.getTimePeriods(data);
-    const types = preproc.getTypes(data);
+    const TIME_PERIODS = preproc.getTimePeriods(data);
+    const TYPES = preproc.getTypes(data);
 
     //viz1 preprocess
     var yearlyData = preproc.filterYears(data);
     var viz1Data = preproc.filterYearlyDataByCrimeType(yearlyData);
-    
 
     //viz2 preprocess
     var crimeTypeData = preproc.filterCrimeType(data);
@@ -54,7 +55,7 @@ import * as d3Chromatic from 'd3-scale-chromatic'
 
     //viz3 preprocess
     var viz3Data = preproc.filterTimePeriod(crimeTypeData);
-    preproc.fillMissingData(viz3Data, types, timePeriods);
+    preproc.fillMissingData(viz3Data, TYPES, TIME_PERIODS);
 
     //viz4 preprocess
     var viz4Data = preproc.filterYearlyDataByDate(yearlyData);
@@ -131,6 +132,7 @@ import * as d3Chromatic from 'd3-scale-chromatic'
      *   This function builds the graph.
      */
     function buildViz1 () {
+      currentViz = 1
       helper.removeG()
       const g = helper.generateG(margin)
       helper.appendAxes(g)
@@ -141,7 +143,7 @@ import * as d3Chromatic from 'd3-scale-chromatic'
       viz1.drawXAxis(xBandScale, graphSize.height)
       viz1.drawYAxis(yLinearScale, graphSize.width)
 
-      viz1.setColorScaleDomain(colorScaleOrdinal, types)
+      viz1.setColorScaleDomain(colorScaleOrdinal, TYPES)
 
       viz1.createGroups(viz1Data)
       viz1.drawBars(yLinearScale, xBandScale, colorScaleOrdinal)
@@ -159,6 +161,7 @@ import * as d3Chromatic from 'd3-scale-chromatic'
     *   This function builds the graph.
     */
    function buildViz2 () {
+    currentViz = 2
       helper.removeG()
       const g = helper.generateG(margin)
       helper.appendAxes(g)
@@ -182,12 +185,13 @@ import * as d3Chromatic from 'd3-scale-chromatic'
     *   This function builds the graph.
     */
     function buildViz3 () {
+      currentViz = 3
       helper.removeG()
       const g = helper.generateG(margin)
       helper.appendAxes(g)
 
-      viz3.updateXScale(xBandScale, timePeriods, graphSize.width, util.range)
-      viz3.updateYScale(yBandScale, types, graphSize.height)
+      viz3.updateXScale(xBandScale, TIME_PERIODS, graphSize.width, util.range)
+      viz3.updateYScale(yBandScale, TYPES, graphSize.height)
 
       viz3.drawXAxis(xBandScale, graphSize.height)
       viz3.drawYAxis(yBandScale, graphSize.width)
@@ -201,6 +205,7 @@ import * as d3Chromatic from 'd3-scale-chromatic'
     *   This function builds the graph.
     */
     function buildViz4 () {
+      currentViz = 4
       helper.removeG()
       const g = helper.generateG(margin)
       helper.appendAxes(g)
@@ -220,6 +225,7 @@ import * as d3Chromatic from 'd3-scale-chromatic'
     *   This function builds the viz5 graph.
     */
     function buildViz5 () {
+      currentViz = 5
       helper.removeG()
       const g = helper.generateG(margin)
       helper.appendAxes(g)
@@ -239,7 +245,13 @@ import * as d3Chromatic from 'd3-scale-chromatic'
 
     window.addEventListener('resize', () => {
       setSizing()
-      //build() //todo: recall le build de la current viz.
+      switch(currentViz){
+        case 1: buildViz1(); break;
+        case 2: buildViz2(); break;
+        case 3: buildViz3(); break;
+        case 4: buildViz4(); break;
+        case 5: buildViz5(); break;
+      }
     })
   })
 })(d3)

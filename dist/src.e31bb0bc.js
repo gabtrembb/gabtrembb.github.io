@@ -29038,6 +29038,7 @@ exports.getTimePeriods = getTimePeriods;
 exports.keepChosenSeasons = keepChosenSeasons;
 exports.filterYearlyDataByDate = filterYearlyDataByDate;
 exports.sortViz4Data = sortViz4Data;
+exports.getViz1Data = getViz1Data;
 exports.getViz5Data = getViz5Data;
 
 var _d = require("d3");
@@ -29358,6 +29359,38 @@ function sortViz4Data(viz4Data) {
   });
 } ////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+/**
+ * Get the viz1 data properly formated.
+ *
+ * @param {object[]} data The data to filter (must be the csv data unmodified)
+ * @returns {object[]} The filtered data in this form: [{year: num, volDeVéhiculeÀMoteur: num, Méfait: num, ...}, ...]
+ */
+
+
+function getViz1Data(data) {
+  var crimeTypeAndYearData = filterDataByYearAndCrimeType(data);
+  var viz5Data = [];
+  crimeTypeAndYearData.forEach(function (crime) {
+    var index = indexOf(viz5Data, 'type', crime.type);
+
+    if (index == -1) {
+      viz5Data.push({
+        type: crime.type,
+        2015: 0,
+        2016: 0,
+        2017: 0,
+        2018: 0,
+        2019: 0,
+        2020: 0,
+        2021: 0
+      });
+      index = viz5Data.length - 1;
+    }
+
+    viz5Data[index][crime.year]++;
+  });
+  return viz5Data;
+}
 /**
  * Get the viz5 data properly formated.
  *
@@ -35744,6 +35777,7 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
     Automne: true
   }; //todo: put false on all
 
+  var currentViz = 1;
   var xBandScale = d3.scaleBand().padding(0.25).paddingInner(0.25);
   var xTimeScale = d3.scaleTime();
   var yBandScale = d3.scaleBand().padding(0.2); //const xSubgroupScale = d3.scaleBand().padding(0.05) sert a rien?
@@ -35752,8 +35786,8 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
   var colorScaleOrdinal = d3.scaleOrdinal();
   var colorScaleSequential = d3.scaleSequential(d3Chromatic.interpolateYlGnBu);
   d3.csv('./interventionscitoyendo.csv', d3.autoType).then(function (data) {
-    var timePeriods = preproc.getTimePeriods(data);
-    var types = preproc.getTypes(data); //viz1 preprocess
+    var TIME_PERIODS = preproc.getTimePeriods(data);
+    var TYPES = preproc.getTypes(data); //viz1 preprocess
 
     var yearlyData = preproc.filterYears(data);
     var viz1Data = preproc.filterYearlyDataByCrimeType(yearlyData); //viz2 preprocess
@@ -35762,7 +35796,7 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
     var viz2Data = preproc.filterSeasons(crimeTypeData, SEASONS); //viz3 preprocess
 
     var viz3Data = preproc.filterTimePeriod(crimeTypeData);
-    preproc.fillMissingData(viz3Data, types, timePeriods); //viz4 preprocess
+    preproc.fillMissingData(viz3Data, TYPES, TIME_PERIODS); //viz4 preprocess
 
     var viz4Data = preproc.filterYearlyDataByDate(yearlyData);
     preproc.sortViz4Data(viz4Data); // legend.initGradient(colorScale)
@@ -35848,6 +35882,7 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
 
 
     function buildViz1() {
+      currentViz = 1;
       helper.removeG();
       var g = helper.generateG(margin);
       helper.appendAxes(g);
@@ -35855,7 +35890,7 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
       viz1.updateYScale(yLinearScale, viz1Data, graphSize.height);
       viz1.drawXAxis(xBandScale, graphSize.height);
       viz1.drawYAxis(yLinearScale, graphSize.width);
-      viz1.setColorScaleDomain(colorScaleOrdinal, types);
+      viz1.setColorScaleDomain(colorScaleOrdinal, TYPES);
       viz1.createGroups(viz1Data);
       viz1.drawBars(yLinearScale, xBandScale, colorScaleOrdinal); // viz.rotateXTicks()
       // viz.updateRects(xBandScale, yScale, colorScale)
@@ -35870,6 +35905,7 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
 
 
     function buildViz2() {
+      currentViz = 2;
       helper.removeG();
       var g = helper.generateG(margin);
       helper.appendAxes(g); //todo: append buttons and keep selected the ones from choosen seasons.
@@ -35889,11 +35925,12 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
 
 
     function buildViz3() {
+      currentViz = 3;
       helper.removeG();
       var g = helper.generateG(margin);
       helper.appendAxes(g);
-      viz3.updateXScale(xBandScale, timePeriods, graphSize.width, util.range);
-      viz3.updateYScale(yBandScale, types, graphSize.height);
+      viz3.updateXScale(xBandScale, TIME_PERIODS, graphSize.width, util.range);
+      viz3.updateYScale(yBandScale, TYPES, graphSize.height);
       viz3.drawXAxis(xBandScale, graphSize.height);
       viz3.drawYAxis(yBandScale, graphSize.width);
       viz3.setColorScaleDomain(colorScaleSequential, viz3Data);
@@ -35905,6 +35942,7 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
 
 
     function buildViz4() {
+      currentViz = 4;
       helper.removeG();
       var g = helper.generateG(margin);
       helper.appendAxes(g);
@@ -35923,6 +35961,7 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
 
 
     function buildViz5() {
+      currentViz = 5;
       helper.removeG();
       var g = helper.generateG(margin);
       helper.appendAxes(g);
@@ -35936,7 +35975,29 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
     }
 
     window.addEventListener('resize', function () {
-      setSizing(); //build() //todo: recall le build de la current viz.
+      setSizing();
+
+      switch (currentViz) {
+        case 1:
+          buildViz1();
+          break;
+
+        case 2:
+          buildViz2();
+          break;
+
+        case 3:
+          buildViz3();
+          break;
+
+        case 4:
+          buildViz4();
+          break;
+
+        case 5:
+          buildViz5();
+          break;
+      }
     });
   });
 })(d3);
@@ -35968,7 +36029,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "62128" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "54753" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

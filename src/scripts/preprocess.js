@@ -255,6 +255,27 @@ export function sortViz4Data(viz4Data) {
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+
+/**
+ * Get the viz1 data properly formated.
+ *
+ * @param {object[]} data The data to filter (must be the csv data unmodified)
+ * @returns {object[]} The filtered data in this form: [{year: num, volDeVéhiculeÀMoteur: num, Méfait: num, ...}, ...]
+ */
+ export function getViz1Data(data) {
+  var crimeTypeAndYearData = filterDataByYearAndCrimeType(data)
+  var viz5Data = []
+  crimeTypeAndYearData.forEach(crime => {
+    var index = indexOf(viz5Data, 'type', crime.type)
+    if(index == -1){
+      viz5Data.push({type: crime.type, 2015: 0, 2016: 0, 2017: 0, 2018: 0, 2019: 0, 2020: 0, 2021: 0})
+      index = viz5Data.length -1
+    }
+    viz5Data[index][crime.year]++
+  });
+  return viz5Data
+}
+
 /**
  * Get the viz5 data properly formated.
  *
