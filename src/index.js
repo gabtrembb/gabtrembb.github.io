@@ -45,8 +45,7 @@ import * as d3Chromatic from 'd3-scale-chromatic'
 
     //viz1 preprocess
     var yearlyData = preproc.filterYears(data);
-    var viz1Data = preproc.filterYearlyDataByCrimeType(yearlyData);
-    
+    var viz1Data = preproc.getViz1Data(data);
 
     //viz2 preprocess
     var crimeTypeData = preproc.filterCrimeType(data);
@@ -143,8 +142,7 @@ import * as d3Chromatic from 'd3-scale-chromatic'
 
       viz1.setColorScaleDomain(colorScaleOrdinal, types)
 
-      viz1.createGroups(viz1Data)
-      viz1.drawBars(yLinearScale, xBandScale, colorScaleOrdinal)
+      viz1.drawBars(yLinearScale, xBandScale, colorScaleOrdinal, viz1Data)
 
       // viz.rotateXTicks()
 
@@ -175,7 +173,7 @@ import * as d3Chromatic from 'd3-scale-chromatic'
 
       viz1.setColorScaleDomain(colorScaleOrdinal, [SEASONS.Winter, SEASONS.Spring, SEASONS.Summer, SEASONS.Autumn])
 
-      viz1.createGroups(filteredData)
+      viz2.createGroups(filteredData)
       viz2.drawBars(yLinearScale, xBandScale, colorScaleOrdinal, filteredData, SEASONS)
    }
    /**

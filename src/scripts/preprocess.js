@@ -28,6 +28,27 @@ export function filterYears (data) {
   return filteredData
 }
 
+export function getViz1Data(data) {
+  var crimeTypeAndYearData = filterDataByYearAndCrimeType(data)
+  var viz1Data = []
+  crimeTypeAndYearData.forEach(crime => {
+    var index = indexOf(viz1Data, 'year', crime.year)
+    if(index == -1){
+      viz1Data.push({year: crime.year, 
+        'Vol de v�hicule � moteur': 0, 
+        'M�fait': 0, 
+        'Vols qualifi�s': 0, 
+        'Introduction': 0, 
+        'Vol dans / sur v�hicule � moteur': 0, 
+        'Infractions entrainant la mort': 0
+      })
+      index = viz1Data.length -1
+    }
+    viz1Data[index][crime.type]++
+  });
+  return viz1Data
+}
+
 //pour viz2.
 export function filterCrimeType (data) {
   var filteredData = []

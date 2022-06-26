@@ -25,8 +25,6 @@
  */
  export function drawBars (y, x, color, data) { //todo: 1 seule fonction pr tt graphs? il y a juste les catégories qui changent la donne.
   var stackedData = d3.stack().keys(['2015', '2016', '2017', '2018', '2019', '2020', '2021'])(data)
-  console.log(data)
-  console.log(stackedData)
 
   d3.select('#graph-g')
     .selectAll()
