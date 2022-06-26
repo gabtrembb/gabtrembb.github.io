@@ -29,8 +29,7 @@ import * as d3Chromatic from 'd3-scale-chromatic'
   const SEASONS = {Winter: "Hiver", Spring: "Printemps", Summer: "Été", Autumn: "Automne"}
   const MONTH_NAMES = ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"]
 
-  var chosenSeasons = {Hiver: true, Printemps: true, Été: false, Automne: true} //todo: put false on all
-
+  var chosenSeasons = {Hiver: true, Printemps: true, Été: true, Automne: true}
   var currentViz = 0;
 
   const xBandScale = d3.scaleBand().padding(0.25).paddingInner(0.25)
@@ -75,6 +74,83 @@ import * as d3Chromatic from 'd3-scale-chromatic'
     setClickHandlerViz4()
     setClickHandlerViz5()
 
+    setClickHandlerSummer()
+    setClickHandlerSpring()
+    setClickHandlerWinter()
+    setClickHandlerFall()
+
+    /**
+     *   This function handles the buttons click.
+     */
+    function setClickHandlerSummer () {
+      d3.select('#summer-button').on('click', () => { chosenSeasons.Été = !chosenSeasons.Été; buildViz2() } )
+      setHoverHandlerSummer()
+    }
+
+    function setHoverHandlerSummer() {
+      d3.select('#summer-button').on('mouseover', () => { 
+        if (chosenSeasons.Été) document.getElementById('summer-button').style.backgroundColor = 'rgba(44, 160, 44, .25)'
+        else document.getElementById('summer-button').style.backgroundColor = '#2ca02c'
+      } )
+      d3.select('#summer-button').on('mouseleave', () => { 
+        if (!chosenSeasons.Été) document.getElementById('summer-button').style.backgroundColor = 'rgba(44, 160, 44, .25)'
+        else document.getElementById('summer-button').style.backgroundColor = '#2ca02c' } )
+    }
+
+    /**
+     *   This function handles the buttons click.
+     */
+    function setClickHandlerSpring () {
+      d3.select('#spring-button').on('click', () => { chosenSeasons.Printemps = !chosenSeasons.Printemps; buildViz2() } )
+      setHoverHandlerSpring()
+    }
+
+    function setHoverHandlerSpring() {
+      d3.select('#spring-button').on('mouseover', () => { 
+        if (chosenSeasons.Printemps) document.getElementById('spring-button').style.backgroundColor = 'rgba(255, 127, 14, .25)'
+        else document.getElementById('spring-button').style.backgroundColor = '#ff7f0e'
+      } )
+      d3.select('#spring-button').on('mouseleave', () => { 
+        if (!chosenSeasons.Printemps) document.getElementById('spring-button').style.backgroundColor = 'rgba(255, 127, 14, .25)'
+        else document.getElementById('spring-button').style.backgroundColor = '#ff7f0e' } )
+    }
+
+    /**
+     *   This function handles the buttons click.
+     */
+    function setClickHandlerWinter () {
+      d3.select('#winter-button').on('click', () => { chosenSeasons.Hiver = !chosenSeasons.Hiver; buildViz2() } )
+      setHoverHandlerWinter()
+    }
+
+    function setHoverHandlerWinter() {
+      d3.select('#winter-button').on('mouseover', () => { 
+        if (chosenSeasons.Hiver) document.getElementById('winter-button').style.backgroundColor = 'rgba(31, 119, 180, .25)'
+        else document.getElementById('winter-button').style.backgroundColor = '#1f77b4'
+      } )
+      d3.select('#winter-button').on('mouseleave', () => { 
+        if (!chosenSeasons.Hiver) document.getElementById('winter-button').style.backgroundColor = 'rgba(31, 119, 180, .25)'
+        else document.getElementById('winter-button').style.backgroundColor = '#1f77b4' } )
+    }
+
+    /**
+     *   This function handles the buttons click.
+     */
+    function setClickHandlerFall () {
+      d3.select('#fall-button').on('click', () => { chosenSeasons.Automne = !chosenSeasons.Automne; buildViz2() } )
+      setHoverHandlerFall()
+    }
+
+    function setHoverHandlerFall() {
+      d3.select('#fall-button').on('mouseover', () => { 
+        if (chosenSeasons.Automne) document.getElementById('fall-button').style.backgroundColor = 'rgba(214, 39, 40, .25)'
+        else document.getElementById('fall-button').style.backgroundColor = '#d62728'
+      } )
+      d3.select('#fall-button').on('mouseleave', () => { 
+        if (!chosenSeasons.Automne) document.getElementById('fall-button').style.backgroundColor = 'rgba(214, 39, 40, .25)'
+        else document.getElementById('fall-button').style.backgroundColor = '#d62728' } )
+    }
+    
     /**
      *   This function handles the buttons click.
      */
@@ -156,6 +232,8 @@ import * as d3Chromatic from 'd3-scale-chromatic'
 
       //legend.draw(margin.left / 2, margin.top + 5, graphSize.height - 10, 15, 'url(#gradient)', colorScale)
       legend.drawLegend(colorScaleOrdinal, g, graphSize.width)
+
+      document.getElementById('season-buttons-container').style.display = 'none'
     }
     /**
     *   This function builds the graph.
@@ -165,8 +243,6 @@ import * as d3Chromatic from 'd3-scale-chromatic'
       const g = helper.generateG(margin)
       helper.appendAxes(g)
       currentViz = 2
-
-      //todo: append buttons and keep selected the ones from choosen seasons.
 
       var filteredData = preproc.keepChosenSeasons(viz2Data, chosenSeasons, SEASONS)
 
@@ -180,6 +256,8 @@ import * as d3Chromatic from 'd3-scale-chromatic'
 
       viz2.createGroups(filteredData)
       viz2.drawBars(yLinearScale, xBandScale, colorScaleOrdinal, filteredData, SEASONS)
+
+      document.getElementById('season-buttons-container').style.display = 'inline'
    }
    /**
     *   This function builds the graph.
@@ -199,6 +277,8 @@ import * as d3Chromatic from 'd3-scale-chromatic'
       viz3.setColorScaleDomain(colorScaleSequential, viz3Data)
 
       viz3.updateRects(xBandScale, yBandScale, colorScaleSequential, viz3Data)
+
+      document.getElementById('season-buttons-container').style.display = 'none'
    }
 
    /**
@@ -219,6 +299,8 @@ import * as d3Chromatic from 'd3-scale-chromatic'
       viz1.setColorScaleDomain(colorScaleOrdinal, viz4Data.map(x => x.year))
 
       viz4.drawLines(xTimeScale, yLinearScale, colorScaleOrdinal, viz4Data)
+
+      document.getElementById('season-buttons-container').style.display = 'none'
    }
 
    /**
@@ -240,7 +322,9 @@ import * as d3Chromatic from 'd3-scale-chromatic'
 
       viz1.setColorScaleDomain(colorScaleOrdinal, [2015, 2016, 2017, 2018, 2019, 2020, 2021])
 
-      viz5.drawBars(yLinearScale, xBandScale, colorScaleOrdinal, viz5Data)      
+      viz5.drawBars(yLinearScale, xBandScale, colorScaleOrdinal, viz5Data)    
+      
+      document.getElementById('season-buttons-container').style.display = 'none'
    }
 
     window.addEventListener('resize', () => {
