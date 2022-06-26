@@ -31,6 +31,8 @@ import * as d3Chromatic from 'd3-scale-chromatic'
 
   var chosenSeasons = {Hiver: true, Printemps: true, Été: false, Automne: true} //todo: put false on all
 
+  var currentViz = 0;
+
   const xBandScale = d3.scaleBand().padding(0.25).paddingInner(0.25)
   const xTimeScale = d3.scaleTime()
   const yBandScale = d3.scaleBand().padding(0.2)
@@ -134,6 +136,7 @@ import * as d3Chromatic from 'd3-scale-chromatic'
       helper.removeG()
       const g = helper.generateG(margin)
       helper.appendAxes(g)
+      currentViz = 1
 
       viz1.updateXScale(xBandScale, viz1Data, graphSize.width - padding, util.range)
       viz1.updateYScale(yLinearScale, viz1Data, graphSize.height)
@@ -161,6 +164,7 @@ import * as d3Chromatic from 'd3-scale-chromatic'
       helper.removeG()
       const g = helper.generateG(margin)
       helper.appendAxes(g)
+      currentViz = 2
 
       //todo: append buttons and keep selected the ones from choosen seasons.
 
@@ -184,6 +188,7 @@ import * as d3Chromatic from 'd3-scale-chromatic'
       helper.removeG()
       const g = helper.generateG(margin)
       helper.appendAxes(g)
+      currentViz = 3
 
       viz3.updateXScale(xBandScale, timePeriods, graphSize.width, util.range)
       viz3.updateYScale(yBandScale, types, graphSize.height)
@@ -203,6 +208,7 @@ import * as d3Chromatic from 'd3-scale-chromatic'
       helper.removeG()
       const g = helper.generateG(margin)
       helper.appendAxes(g)
+      currentViz = 4
 
       viz4.updateXScale(xTimeScale, viz4Data, graphSize.width)
       viz4.updateYScale(yLinearScale, viz4Data, graphSize.height)
@@ -222,6 +228,7 @@ import * as d3Chromatic from 'd3-scale-chromatic'
       helper.removeG()
       const g = helper.generateG(margin)
       helper.appendAxes(g)
+      currentViz = 5
 
       var viz5Data = preproc.getViz5Data(data)
 
@@ -238,7 +245,28 @@ import * as d3Chromatic from 'd3-scale-chromatic'
 
     window.addEventListener('resize', () => {
       setSizing()
-      //build() //todo: recall le build de la current viz.
+      
+      switch(currentViz) {
+        case 1:
+          buildViz1();
+          break;
+
+        case 2:
+          buildViz2();
+          break;
+
+        case 3:
+          buildViz3();
+          break;
+
+        case 4:
+          buildViz4();
+          break;
+
+        case 5:
+          buildViz5();
+          break;
+      }
     })
   })
 })(d3)
