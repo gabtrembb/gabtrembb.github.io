@@ -21,7 +21,7 @@
  */
  export function updateYScale (yScale, viz4Data, height) {
   var maxValue = d3.max(viz4Data, d => d3.max(d.dateInfos, dd => dd.count))
-  yScale.domain([0, maxValue]).range([height, 0])
+  yScale.domain([60, maxValue]).range([height, 0])
 }
 
 /**
@@ -31,6 +31,16 @@
  */
  export function drawXAxis (xScale, height, MONTH_NAMES) {
   d3.select('.x.axis').attr('transform', 'translate( 0, ' + height + ')').call(d3.axisBottom(xScale).tickFormat(x => MONTH_NAMES[x.getMonth()]))
+}
+
+/**
+ * Draws the Y axis to the right of the diagram.
+ *
+ * @param {*} yScale The scale to use to draw the axis
+ * @param {number} width The width of the graphic
+ */
+ export function drawYAxis (yScale, width) {
+  d3.select('.y.axis').call(d3.axisLeft(yScale).tickFormat(x => x.toString()))
 }
 
 /**
@@ -50,7 +60,7 @@
   .append('path')
   .attr('fill', 'none')
   .attr('stroke', d => colorScale(d.year))
-  .attr('stroke-width', 1)
+  .attr('stroke-width', 2)
   .attr('d', function(d) {return line(d.dateInfos)})
   
 }

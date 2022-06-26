@@ -266,6 +266,23 @@ export function filterYearlyDataByDate(yearlyData) {
       filteredData[filteredData.length-1].dateInfos[dateInfoIndex].count++
     });
   });
+
+  var monthMax = []
+  filteredData.forEach(year => {
+    monthMax = []
+    for (var i = 0; i < 12; i++) {
+      var maxCount = 0
+      var maxDayDate = 0
+      year.dateInfos.forEach(day => {
+        if (day.date.getMonth() == i && day.count > maxCount) {
+          maxCount = day.count
+          maxDayDate = day.date.getDate()
+        }
+      })
+      monthMax.push({date: new Date(0, i, maxDayDate), count: maxCount})
+    }
+    year.dateInfos = monthMax;
+  })
   return filteredData
 }
 
