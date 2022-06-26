@@ -30,42 +30,21 @@ import * as d3Chromatic from 'd3-scale-chromatic'
   const SEASONS = {Winter: "Hiver", Spring: "Printemps", Summer: "Été", Autumn: "Automne"}
   const MONTH_NAMES = ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"]
 
-  var chosenSeasons = {Hiver: true, Printemps: true, Été: false, Automne: true} //todo: put false on all
-  var currentViz = 1
+  var chosenSeasons = {Hiver: true, Printemps: true, Été: true, Automne: true}
+  var currentViz = 0;
 
   const xBandScale = d3.scaleBand().padding(0.25).paddingInner(0.25)
   const xTimeScale = d3.scaleTime()
   const yBandScale = d3.scaleBand().padding(0.2)
-  //const xSubgroupScale = d3.scaleBand().padding(0.05) sert a rien?
   const yLinearScale = d3.scaleLinear()
   const colorScaleOrdinal = d3.scaleOrdinal()
   const colorScaleSequential = d3.scaleSequential(d3Chromatic.interpolateYlGnBu)
 
   d3.csv('./interventionscitoyendo.csv', d3.autoType).then(function (data) {
+    preproc.filterCrimeTypeName(data);
+    data = preproc.filterDataByDateAndCrimeType(data);
+    const TYPES = preproc.getTypes(data);  
     const TIME_PERIODS = preproc.getTimePeriods(data);
-    const TYPES = preproc.getTypes(data);
-
-    //viz1 preprocess
-    var yearlyData = preproc.filterYears(data);
-    var viz1Data = preproc.filterYearlyDataByCrimeType(yearlyData);
-
-    //viz2 preprocess
-    var crimeTypeData = preproc.filterCrimeType(data);
-    var viz2Data = preproc.filterSeasons(crimeTypeData, SEASONS);
-
-    //viz3 preprocess
-    var viz3Data = preproc.filterTimePeriod(crimeTypeData);
-    preproc.fillMissingData(viz3Data, TYPES, TIME_PERIODS);
-
-    //viz4 preprocess
-    var viz4Data = preproc.filterYearlyDataByDate(yearlyData);
-    preproc.sortViz4Data(viz4Data)
-
-    // legend.initGradient(colorScale)
-    // legend.initLegendBar()
-    // legend.initLegendAxis()
-
-    // viz.appendRects(data)
 
     setSizing()
     setClickHandlerViz1()
@@ -74,36 +53,113 @@ import * as d3Chromatic from 'd3-scale-chromatic'
     setClickHandlerViz4()
     setClickHandlerViz5()
 
+    setClickHandlerSummer()
+    setClickHandlerSpring()
+    setClickHandlerWinter()
+    setClickHandlerFall()
+
     /**
      *   This function handles the buttons click.
+     */
+    function setClickHandlerSummer () {
+      d3.select('#summer-button').on('click', () => { chosenSeasons.Été = !chosenSeasons.Été; buildViz2() } )
+      setHoverHandlerSummer()
+    }
+
+    function setHoverHandlerSummer() {
+      d3.select('#summer-button').on('mouseover', () => { 
+        if (chosenSeasons.Été) document.getElementById('summer-button').style.backgroundColor = 'rgba(44, 160, 44, .25)'
+        else document.getElementById('summer-button').style.backgroundColor = '#2ca02c'
+      } )
+      d3.select('#summer-button').on('mouseleave', () => { 
+        if (!chosenSeasons.Été) document.getElementById('summer-button').style.backgroundColor = 'rgba(44, 160, 44, .25)'
+        else document.getElementById('summer-button').style.backgroundColor = '#2ca02c' } )
+    }
+
+    /**
+     *   This function handles the buttons click.
+     */
+    function setClickHandlerSpring () {
+      d3.select('#spring-button').on('click', () => { chosenSeasons.Printemps = !chosenSeasons.Printemps; buildViz2() } )
+      setHoverHandlerSpring()
+    }
+
+    function setHoverHandlerSpring() {
+      d3.select('#spring-button').on('mouseover', () => { 
+        if (chosenSeasons.Printemps) document.getElementById('spring-button').style.backgroundColor = 'rgba(255, 127, 14, .25)'
+        else document.getElementById('spring-button').style.backgroundColor = '#ff7f0e'
+      } )
+      d3.select('#spring-button').on('mouseleave', () => { 
+        if (!chosenSeasons.Printemps) document.getElementById('spring-button').style.backgroundColor = 'rgba(255, 127, 14, .25)'
+        else document.getElementById('spring-button').style.backgroundColor = '#ff7f0e' } )
+    }
+
+    /**
+     *   This function handles the buttons click.
+     */
+    function setClickHandlerWinter () {
+      d3.select('#winter-button').on('click', () => { chosenSeasons.Hiver = !chosenSeasons.Hiver; buildViz2() } )
+      setHoverHandlerWinter()
+    }
+
+    function setHoverHandlerWinter() {
+      d3.select('#winter-button').on('mouseover', () => { 
+        if (chosenSeasons.Hiver) document.getElementById('winter-button').style.backgroundColor = 'rgba(31, 119, 180, .25)'
+        else document.getElementById('winter-button').style.backgroundColor = '#1f77b4'
+      } )
+      d3.select('#winter-button').on('mouseleave', () => { 
+        if (!chosenSeasons.Hiver) document.getElementById('winter-button').style.backgroundColor = 'rgba(31, 119, 180, .25)'
+        else document.getElementById('winter-button').style.backgroundColor = '#1f77b4' } )
+    }
+
+    /**
+     *   This function handles the buttons click.
+     */
+    function setClickHandlerFall () {
+      d3.select('#fall-button').on('click', () => { chosenSeasons.Automne = !chosenSeasons.Automne; buildViz2() } )
+      setHoverHandlerFall()
+    }
+
+    function setHoverHandlerFall() {
+      d3.select('#fall-button').on('mouseover', () => { 
+        if (chosenSeasons.Automne) document.getElementById('fall-button').style.backgroundColor = 'rgba(214, 39, 40, .25)'
+        else document.getElementById('fall-button').style.backgroundColor = '#d62728'
+      } )
+      d3.select('#fall-button').on('mouseleave', () => { 
+        if (!chosenSeasons.Automne) document.getElementById('fall-button').style.backgroundColor = 'rgba(214, 39, 40, .25)'
+        else document.getElementById('fall-button').style.backgroundColor = '#d62728' } )
+    }
+    
+    /**
+     *   This function handles the viz1 button click.
      */
     function setClickHandlerViz1 () {
       d3.select('#viz-button1').on('click', () => { buildViz1() } )
     }
 
     /**
-     *   This function handles the buttons click.
+     *   This function handles the viz2 button click.
      */
      function setClickHandlerViz2 () {
       d3.select('#viz-button2').on('click', () => { buildViz2() } )
     }
 
     /**
-     *   This function handles the buttons click.
+     *   This function handles the viz3 button click.
      */
      function setClickHandlerViz3 () {
       d3.select('#viz-button3').on('click', () => { buildViz3() } )
     }
 
     /**
-     *   This function handles the buttons click.
+     *   This function handles the viz4 button click.
      */
      function setClickHandlerViz4 () {
       d3.select('#viz-button4').on('click', () => { buildViz4() } )
     }
 
     /**
-     *   This function handles the buttons click.
+     *   This function handles the viz5 button click.
      */
      function setClickHandlerViz5 () {
       d3.select('#viz-button5').on('click', () => { buildViz5() } )
@@ -129,15 +185,18 @@ import * as d3Chromatic from 'd3-scale-chromatic'
     }
 
     /**
-     *   This function builds the graph.
+     *   This function builds the viz1 graph.
      */
     function buildViz1 () {
       currentViz = 1
       helper.removeG()
       const g = helper.generateG(margin)
       helper.appendAxes(g)
+      helper.appendTitle(g, graphSize.width, 'Tendances du taux de criminalité par année')
 
-      viz1.updateXScale(xBandScale, viz1Data, graphSize.width - padding, util.range)
+      const viz1Data = preproc.getViz1Data(data)
+
+      viz1.updateXScale(xBandScale, viz1Data, graphSize.width - padding)
       viz1.updateYScale(yLinearScale, viz1Data, graphSize.height)
 
       viz1.drawXAxis(xBandScale, graphSize.height)
@@ -145,32 +204,25 @@ import * as d3Chromatic from 'd3-scale-chromatic'
 
       viz1.setColorScaleDomain(colorScaleOrdinal, TYPES)
 
-      viz1.createGroups(viz1Data)
-      viz1.drawBars(yLinearScale, xBandScale, colorScaleOrdinal)
+      viz1.drawBars(yLinearScale, xBandScale, colorScaleOrdinal, viz1Data)
 
-      // viz.rotateXTicks()
-
-      // viz.updateRects(xBandScale, yScale, colorScale)
-
-      // hover.setRectHandler(xBandScale, yScale, hover.rectSelected, hover.rectUnselected, hover.selectTicks, hover.unselectTicks)
-
-      //legend.draw(margin.left / 2, margin.top + 5, graphSize.height - 10, 15, 'url(#gradient)', colorScale)
       legend.drawLegend(colorScaleOrdinal, g, graphSize.width)
+
+      document.getElementById('season-buttons-container').style.display = 'none'
     }
     /**
     *   This function builds the graph.
     */
    function buildViz2 () {
-    currentViz = 2
+      currentViz = 2
       helper.removeG()
       const g = helper.generateG(margin)
       helper.appendAxes(g)
+      helper.appendTitle(g, graphSize.width, "Tendances du taux de criminalité par catégorie selon la période de l'année")
 
-      //todo: append buttons and keep selected the ones from choosen seasons.
+      var viz2Data = preproc.getViz2Data(data, chosenSeasons, SEASONS)
 
-      var filteredData = preproc.keepChosenSeasons(viz2Data, chosenSeasons, SEASONS)
-
-      viz2.updateXScale(xBandScale, filteredData, graphSize.width - padding, util.range)
+      viz2.updateXScale(xBandScale, viz2Data, graphSize.width - padding, util.range)
       viz2.updateYScale(yLinearScale, viz2Data, graphSize.height, SEASONS)
 
       viz1.drawXAxis(xBandScale, graphSize.height)
@@ -178,8 +230,12 @@ import * as d3Chromatic from 'd3-scale-chromatic'
 
       viz1.setColorScaleDomain(colorScaleOrdinal, [SEASONS.Winter, SEASONS.Spring, SEASONS.Summer, SEASONS.Autumn])
 
-      viz1.createGroups(filteredData)
-      viz2.drawBars(yLinearScale, xBandScale, colorScaleOrdinal, filteredData, SEASONS)
+      viz2.createGroups(viz2Data)
+
+      viz2Data = preproc.keepChosenSeasons(viz2Data, chosenSeasons, SEASONS)
+      viz2.drawBars(yLinearScale, xBandScale, colorScaleOrdinal, viz2Data, SEASONS)
+
+      document.getElementById('season-buttons-container').style.display = 'inline'
    }
    /**
     *   This function builds the graph.
@@ -189,6 +245,9 @@ import * as d3Chromatic from 'd3-scale-chromatic'
       helper.removeG()
       const g = helper.generateG(margin)
       helper.appendAxes(g)
+      helper.appendTitle(g, graphSize.width, "Taux et types de crimes par période")
+
+      var viz3Data = preproc.getViz3Data(data, TYPES, TIME_PERIODS)
 
       viz3.updateXScale(xBandScale, TIME_PERIODS, graphSize.width, util.range)
       viz3.updateYScale(yBandScale, TYPES, graphSize.height)
@@ -199,6 +258,8 @@ import * as d3Chromatic from 'd3-scale-chromatic'
       viz3.setColorScaleDomain(colorScaleSequential, viz3Data)
 
       viz3.updateRects(xBandScale, yBandScale, colorScaleSequential, viz3Data)
+
+      document.getElementById('season-buttons-container').style.display = 'none'
    }
 
    /**
@@ -209,6 +270,9 @@ import * as d3Chromatic from 'd3-scale-chromatic'
       helper.removeG()
       const g = helper.generateG(margin)
       helper.appendAxes(g)
+      helper.appendTitle(g, graphSize.width, "Taux de criminalité annuel")
+
+      var viz4Data = preproc.getViz4Data(data)
 
       viz4.updateXScale(xTimeScale, viz4Data, graphSize.width)
       viz4.updateYScale(yLinearScale, viz4Data, graphSize.height)
@@ -219,6 +283,8 @@ import * as d3Chromatic from 'd3-scale-chromatic'
       viz1.setColorScaleDomain(colorScaleOrdinal, viz4Data.map(x => x.year))
 
       viz4.drawLines(xTimeScale, yLinearScale, colorScaleOrdinal, viz4Data)
+
+      document.getElementById('season-buttons-container').style.display = 'none'
    }
 
    /**
@@ -229,6 +295,7 @@ import * as d3Chromatic from 'd3-scale-chromatic'
       helper.removeG()
       const g = helper.generateG(margin)
       helper.appendAxes(g)
+      helper.appendTitle(g, graphSize.width, "Tendances du taux de criminalité par catégorie")
 
       var viz5Data = preproc.getViz5Data(data)
 
@@ -240,17 +307,34 @@ import * as d3Chromatic from 'd3-scale-chromatic'
 
       viz1.setColorScaleDomain(colorScaleOrdinal, [2015, 2016, 2017, 2018, 2019, 2020, 2021])
 
-      viz5.drawBars(yLinearScale, xBandScale, colorScaleOrdinal, viz5Data)      
+      viz5.drawBars(yLinearScale, xBandScale, colorScaleOrdinal, viz5Data)    
+      
+      document.getElementById('season-buttons-container').style.display = 'none'
    }
 
     window.addEventListener('resize', () => {
       setSizing()
-      switch(currentViz){
-        case 1: buildViz1(); break;
-        case 2: buildViz2(); break;
-        case 3: buildViz3(); break;
-        case 4: buildViz4(); break;
-        case 5: buildViz5(); break;
+      
+      switch(currentViz) {
+        case 1:
+          buildViz1();
+          break;
+
+        case 2:
+          buildViz2();
+          break;
+
+        case 3:
+          buildViz3();
+          break;
+
+        case 4:
+          buildViz4();
+          break;
+
+        case 5:
+          buildViz5();
+          break;
       }
     })
   })

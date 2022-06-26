@@ -53,14 +53,16 @@ export function appendAxes (g) {
 }
 
 /**
- * Updates the X scale to be used within each group of the grouped bar char
+ * Appends an SVG g element which will contain the axes.
  *
- * @param {*} scale The scale used for the subgroups
- * @param {string[]} players The players in the subgroups
- * @param {*} xScale The graph's encompassing x scale
+ * @param {*} g The d3 Selection of the graph's g SVG element
+ * @param {string} title The graph's title
  */
- export function updateXSubgroupScale (scale, players, xScale) { 
-  scale
-    .domain(players)
-    .range([0, xScale.bandwidth()])
+ export function appendTitle (g, width, title) {
+  g.append('text')
+    .attr('class', 'graph-title')
+    .attr('text-anchor', 'middle')
+    .style('dominant-baseline', 'central')
+    .attr('x', width/2)
+    .text(title)
 }

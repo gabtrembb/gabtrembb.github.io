@@ -11,7 +11,7 @@ export function drawLegend (colorScale, g, width) {
   const padding = 150
   d3.select('#legend').remove()
   g.append('g').attr('id', 'legend').attr('transform', 'translate('+(width-padding)+',0)')
-  var legend = d3Legend.legendColor().scale(colorScale).title('Legend')
+  var legend = d3Legend.legendColor().scale(colorScale).title('Légende')
   .shape('path', d3.symbol().type(d3.symbolCircle).size(250)())
   g.select('#legend').call(legend)
 }

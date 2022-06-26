@@ -28,6 +28,20 @@
 }
 
 /**
+ * Creates the groups for the grouped bar chart and appends them to the graph.
+ * Each group corresponds to an act.
+ *
+ * @param {object[]} data The data to be used
+ * @param {*} x The graph's x scale
+ */
+ export function createGroups (viz2Data) {
+  d3.select('#graph-g')
+    .selectAll('.group')
+    .data(viz2Data).join('g')
+    .attr('class', 'group')
+}
+
+/**
  * Draws the bars inside the groups
  *
  * @param {*} y The graph's y scale

@@ -21,7 +21,7 @@
  */
  export function updateYScale (yScale, viz4Data, height) {
   var maxValue = d3.max(viz4Data, d => d3.max(d.dateInfos, dd => dd.count))
-  yScale.domain([0, maxValue]).range([height, 0])
+  yScale.domain([60, maxValue]).range([height, 0])
 }
 
 /**
@@ -50,7 +50,7 @@
   .append('path')
   .attr('fill', 'none')
   .attr('stroke', d => colorScale(d.year))
-  .attr('stroke-width', 1)
+  .attr('stroke-width', 2)
   .attr('d', function(d) {return line(d.dateInfos)})
   
 }

@@ -67,9 +67,63 @@ button {
     margin: auto;
 }
 
-button:hover, button:active {
+#viz-button1:hover, #viz-button1:active,
+#viz-button2:hover, #viz-button2:active,
+#viz-button3:hover, #viz-button3:active,
+#viz-button4:hover, #viz-button4:active,
+#viz-button5:hover, #viz-button5:active {
 	background:linear-gradient(to bottom, #f6f6f6 5%, #ffffff 100%);
 	background-color:#f6f6f6;
+}
+
+#season-buttons {
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+}
+
+#season-buttons-container {
+    display: none;
+}
+
+#summer-button {
+    color: #000;
+    width: Auto;
+    height: 50px;
+    background-color: #2ca02c;
+    border: 2px solid #2ca02c;
+    margin: 10px;
+}
+
+
+#winter-button {
+    color: #000;
+    background-color: #1f77b4;
+    border: 2px solid #1f77b4;
+    width: Auto;
+    height: 50px;
+    margin: 10px;
+}
+
+
+#fall-button {
+    color: #000;
+    width: Auto;
+    height: 50px;
+    background-color: #d62728;
+    border: 2px solid #d62728;
+    margin: 10px;
+}
+
+
+#spring-button {
+    color: #000;
+    width: Auto;
+    height: 50px;
+    background-color: #ff7f0e;
+    border: 2px solid #ff7f0e;
+    margin: 10px;
 }
 
 .title, .axis-text {
@@ -112,5 +166,10 @@ button:hover, button:active {
 }
 
 .axis path, .axis line {
+    stroke : black;
+}
+
+.graph-title{
+    transform-origin: center;
     stroke : black;
 }

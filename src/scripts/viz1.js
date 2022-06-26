@@ -1,8 +1,8 @@
 /**
  * Sets the domain of the color scale
  *
- * @param {*} colorScale The color scale used in the heatmap
- * @param {object[]} data The data to be displayed
+ * @param {*} colorScale The ordinal color scale used
+ * @param {any[]} categories The categories that need to be defined by the color scale
  */
 export function setColorScaleDomain (colorScale, categories) {
   colorScale.domain(categories).range(d3.schemeCategory10)
@@ -14,10 +14,9 @@ export function setColorScaleDomain (colorScale, categories) {
  * @param {*} xScale The scale for the x axis
  * @param {object[]} data The data to be used
  * @param {number} width The width of the diagram
- * @param {Function} range A utilitary funtion that could be useful to generate a list of numbers in a range
  */
-export function updateXScale (xScale, viz1Data, width) {
-  xScale.domain(viz1Data.map(x => x.year).sort()).range([0, width])
+export function updateXScale (xScale, data, width) {
+  xScale.domain(data.map(x => x.year).sort()).range([0, width])
 }
 
 /**
@@ -30,10 +29,12 @@ export function updateXScale (xScale, viz1Data, width) {
 export function updateYScale (yScale, viz1Data, height) {
   var totals = [];
   viz1Data.forEach(yearlyData => {
-    var yearlyTotal = 0
-    yearlyData.crimes.forEach(count => {
-      yearlyTotal += count
-    });
+    var yearlyTotal = yearlyData['Vol de véhicule à moteur'] +
+                      yearlyData['Méfait'] +
+                      yearlyData['Vols qualifiés'] +
+                      yearlyData['Introduction'] +
+                      yearlyData['Vol dans / sur véhicule à moteur'] +
+                      yearlyData['Infractions entrainant la mort']
     totals.push(yearlyTotal)
   });
   var maxValue = d3.max(totals)
@@ -60,20 +61,6 @@ export function drawYAxis (yScale, width) {
 }
 
 /**
- * Creates the groups for the grouped bar chart and appends them to the graph.
- * Each group corresponds to an act.
- *
- * @param {object[]} data The data to be used
- * @param {*} x The graph's x scale
- */
- export function createGroups (viz1Data) {
-  d3.select('#graph-g')
-    .selectAll('.group')
-    .data(viz1Data).join('g')
-    .attr('class', 'group')
-}
-
-/**
  * Draws the bars inside the groups
  *
  * @param {*} y The graph's y scale
@@ -81,44 +68,28 @@ export function drawYAxis (yScale, width) {
  * @param {*} color The color scale for the bars
  * @param {*} tip The tooltip to show when each bar is hovered and hide when it's not
  */
- export function drawBars (y, x, color) {
-  var lastY = 0
-  var count = 0 
+ export function drawBars (y, x, color, viz1Data) {
+  var stackedData = d3.stack().keys([
+    'Vol de véhicule à moteur', 
+    'Méfait', 
+    'Vols qualifiés', 
+    'Introduction', 
+    'Vol dans / sur véhicule à moteur', 
+    'Infractions entrainant la mort'
+  ])(viz1Data)
   d3.select('#graph-g')
-    .selectAll('.group')
+    .selectAll()
+    .data(stackedData)
+    .join('g')
+    .classed('series', true)
+    .attr('fill', function (d) { return color(d.key)})
     .selectAll('rect')
-    .data(function(d) {
-      var crimes = []
-      d.crimes.forEach((value, key) => {
-        crimes.push({year: d.year, type: key, count: value})
-      })
-      crimes.sort(function(a, b) {
-        var keyA = a.type
-        var keyB = b.type;
-        if (keyA < keyB) return -1;
-        if (keyA > keyB) return 1;
-        return 0;
-      });
-      return crimes;
-    })
+    .data((d)=>d)
     .join('rect')
-    .attr('x', function (d) { return x(d.year) })
-    .attr('y', function (d) { 
-      var currentY = y(lastY + d.count); 
-      lastY += d.count; 
-      if(count == 5) {lastY = 0; count = 0;} 
-      else {count += 1;}; 
-      return currentY
-    })
     .attr('width', x.bandwidth())
-    .attr('height', function(d) { 
-      var currentHeight = y(lastY) - y(d.count + lastY); 
-      lastY += d.count; 
-      if(count == 5) {lastY = 0; count = 0;} 
-      else {count += 1;}; 
-      return currentHeight 
-    })
-    .attr('fill', function (d) { return color(d.type) })
+    .attr('x', function (d) { return x(d.data.year) })
+    .attr('y', function (d) { return y(d[1])})
+    .attr('height', d => y(d[0])-y(d[1])) 
     // .on('mouseover', tip.show)
     // .on('mouseout', tip.hide)
 }
