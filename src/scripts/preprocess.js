@@ -104,21 +104,21 @@ export function getTimePeriods(data) {
   return timePeriods;
 }
 
-export function keepChosenSeasons(viz2Data, chosenSeasons, seasons) {
+export function keepChosenSeasons(viz2Data, chosenSeasons, SEASONS) {
   var filteredData = []
   viz2Data.forEach(typeData => {
     var typeDataDeepCopy = Object.assign({}, typeData)
-    if(!chosenSeasons[seasons.Winter]){
-      typeDataDeepCopy[seasons.Winter] = 0
+    if(!chosenSeasons['Winter']){
+      typeDataDeepCopy[SEASONS.Winter] = 0
     }
-    if(!chosenSeasons[seasons.Spring]){
-      typeDataDeepCopy[seasons.Spring] = 0
+    if(!chosenSeasons['Spring']){
+      typeDataDeepCopy[SEASONS.Spring] = 0
     }
-    if(!chosenSeasons[seasons.Summer]){
-      typeDataDeepCopy[seasons.Summer] = 0
+    if(!chosenSeasons['Summer']){
+      typeDataDeepCopy[SEASONS.Summer] = 0
     }
-    if(!chosenSeasons[seasons.Autumn]){
-      typeDataDeepCopy[seasons.Autumn] = 0
+    if(!chosenSeasons['Autumn']){
+      typeDataDeepCopy[SEASONS.Autumn] = 0
     }
     filteredData.push(typeDataDeepCopy)
   });
@@ -171,7 +171,7 @@ function filterViz4Data(viz4Data) {
  * @param {object[]} data The data to filter
  * @returns {object[]} The filtered data in this form: [{year: num, volDeVéhiculeÀMoteur: num, Méfait: num, ...}, ...]
  */
- export function getViz2Data(data, chosenSeasons, SEASONS) {
+ export function getViz2Data(data, SEASONS) {
   var viz2Data = []
   data.forEach(crime => {
     var index = indexOf(viz2Data, 'type', crime.type)

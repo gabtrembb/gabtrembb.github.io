@@ -334,25 +334,25 @@ function getTimePeriods(data) {
   return timePeriods;
 }
 
-function keepChosenSeasons(viz2Data, chosenSeasons, seasons) {
+function keepChosenSeasons(viz2Data, chosenSeasons, SEASONS) {
   var filteredData = [];
   viz2Data.forEach(function (typeData) {
     var typeDataDeepCopy = Object.assign({}, typeData);
 
-    if (!chosenSeasons[seasons.Winter]) {
-      typeDataDeepCopy[seasons.Winter] = 0;
+    if (!chosenSeasons['Winter']) {
+      typeDataDeepCopy[SEASONS.Winter] = 0;
     }
 
-    if (!chosenSeasons[seasons.Spring]) {
-      typeDataDeepCopy[seasons.Spring] = 0;
+    if (!chosenSeasons['Spring']) {
+      typeDataDeepCopy[SEASONS.Spring] = 0;
     }
 
-    if (!chosenSeasons[seasons.Summer]) {
-      typeDataDeepCopy[seasons.Summer] = 0;
+    if (!chosenSeasons['Summer']) {
+      typeDataDeepCopy[SEASONS.Summer] = 0;
     }
 
-    if (!chosenSeasons[seasons.Autumn]) {
-      typeDataDeepCopy[seasons.Autumn] = 0;
+    if (!chosenSeasons['Autumn']) {
+      typeDataDeepCopy[SEASONS.Autumn] = 0;
     }
 
     filteredData.push(typeDataDeepCopy);
@@ -422,7 +422,7 @@ function getViz1Data(data) {
  */
 
 
-function getViz2Data(data, chosenSeasons, SEASONS) {
+function getViz2Data(data, SEASONS) {
   var viz2Data = [];
   data.forEach(function (crime) {
     var index = indexOf(viz2Data, 'type', crime.type);
@@ -12150,10 +12150,10 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
   };
   var MONTH_NAMES = ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"];
   var chosenSeasons = {
-    Hiver: true,
-    Printemps: true,
-    Été: true,
-    Automne: true
+    Winter: true,
+    Spring: true,
+    Summer: true,
+    Autumn: true
   };
   var currentViz = 0;
   var xBandScale = d3.scaleBand().padding(0.25).paddingInner(0.25);
@@ -12183,7 +12183,7 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
 
     function setClickHandlerSummer() {
       d3.select('#summer-button').on('click', function () {
-        chosenSeasons.Été = !chosenSeasons.Été;
+        chosenSeasons.Summer = !chosenSeasons.Summer;
         buildViz2();
       });
       setHoverHandlerSummer();
@@ -12191,10 +12191,10 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
 
     function setHoverHandlerSummer() {
       d3.select('#summer-button').on('mouseover', function () {
-        if (chosenSeasons.Été) document.getElementById('summer-button').style.backgroundColor = 'rgba(44, 160, 44, .25)';else document.getElementById('summer-button').style.backgroundColor = '#2ca02c';
+        if (chosenSeasons.Summer) document.getElementById('summer-button').style.backgroundColor = 'rgba(44, 160, 44, .25)';else document.getElementById('summer-button').style.backgroundColor = '#2ca02c';
       });
       d3.select('#summer-button').on('mouseleave', function () {
-        if (!chosenSeasons.Été) document.getElementById('summer-button').style.backgroundColor = 'rgba(44, 160, 44, .25)';else document.getElementById('summer-button').style.backgroundColor = '#2ca02c';
+        if (!chosenSeasons.Summer) document.getElementById('summer-button').style.backgroundColor = 'rgba(44, 160, 44, .25)';else document.getElementById('summer-button').style.backgroundColor = '#2ca02c';
       });
     }
     /**
@@ -12204,7 +12204,7 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
 
     function setClickHandlerSpring() {
       d3.select('#spring-button').on('click', function () {
-        chosenSeasons.Printemps = !chosenSeasons.Printemps;
+        chosenSeasons.Spring = !chosenSeasons.Spring;
         buildViz2();
       });
       setHoverHandlerSpring();
@@ -12212,10 +12212,10 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
 
     function setHoverHandlerSpring() {
       d3.select('#spring-button').on('mouseover', function () {
-        if (chosenSeasons.Printemps) document.getElementById('spring-button').style.backgroundColor = 'rgba(255, 127, 14, .25)';else document.getElementById('spring-button').style.backgroundColor = '#ff7f0e';
+        if (chosenSeasons.Spring) document.getElementById('spring-button').style.backgroundColor = 'rgba(255, 127, 14, .25)';else document.getElementById('spring-button').style.backgroundColor = '#ff7f0e';
       });
       d3.select('#spring-button').on('mouseleave', function () {
-        if (!chosenSeasons.Printemps) document.getElementById('spring-button').style.backgroundColor = 'rgba(255, 127, 14, .25)';else document.getElementById('spring-button').style.backgroundColor = '#ff7f0e';
+        if (!chosenSeasons.Spring) document.getElementById('spring-button').style.backgroundColor = 'rgba(255, 127, 14, .25)';else document.getElementById('spring-button').style.backgroundColor = '#ff7f0e';
       });
     }
     /**
@@ -12225,7 +12225,7 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
 
     function setClickHandlerWinter() {
       d3.select('#winter-button').on('click', function () {
-        chosenSeasons.Hiver = !chosenSeasons.Hiver;
+        chosenSeasons.Winter = !chosenSeasons.Winter;
         buildViz2();
       });
       setHoverHandlerWinter();
@@ -12233,10 +12233,10 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
 
     function setHoverHandlerWinter() {
       d3.select('#winter-button').on('mouseover', function () {
-        if (chosenSeasons.Hiver) document.getElementById('winter-button').style.backgroundColor = 'rgba(31, 119, 180, .25)';else document.getElementById('winter-button').style.backgroundColor = '#1f77b4';
+        if (chosenSeasons.Winter) document.getElementById('winter-button').style.backgroundColor = 'rgba(31, 119, 180, .25)';else document.getElementById('winter-button').style.backgroundColor = '#1f77b4';
       });
       d3.select('#winter-button').on('mouseleave', function () {
-        if (!chosenSeasons.Hiver) document.getElementById('winter-button').style.backgroundColor = 'rgba(31, 119, 180, .25)';else document.getElementById('winter-button').style.backgroundColor = '#1f77b4';
+        if (!chosenSeasons.Winter) document.getElementById('winter-button').style.backgroundColor = 'rgba(31, 119, 180, .25)';else document.getElementById('winter-button').style.backgroundColor = '#1f77b4';
       });
     }
     /**
@@ -12246,7 +12246,7 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
 
     function setClickHandlerFall() {
       d3.select('#fall-button').on('click', function () {
-        chosenSeasons.Automne = !chosenSeasons.Automne;
+        chosenSeasons.Autumn = !chosenSeasons.Autumn;
         buildViz2();
       });
       setHoverHandlerFall();
@@ -12254,10 +12254,10 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
 
     function setHoverHandlerFall() {
       d3.select('#fall-button').on('mouseover', function () {
-        if (chosenSeasons.Automne) document.getElementById('fall-button').style.backgroundColor = 'rgba(214, 39, 40, .25)';else document.getElementById('fall-button').style.backgroundColor = '#d62728';
+        if (chosenSeasons.Autumn) document.getElementById('fall-button').style.backgroundColor = 'rgba(214, 39, 40, .25)';else document.getElementById('fall-button').style.backgroundColor = '#d62728';
       });
       d3.select('#fall-button').on('mouseleave', function () {
-        if (!chosenSeasons.Automne) document.getElementById('fall-button').style.backgroundColor = 'rgba(214, 39, 40, .25)';else document.getElementById('fall-button').style.backgroundColor = '#d62728';
+        if (!chosenSeasons.Autumn) document.getElementById('fall-button').style.backgroundColor = 'rgba(214, 39, 40, .25)';else document.getElementById('fall-button').style.backgroundColor = '#d62728';
       });
     }
     /**
@@ -12359,7 +12359,7 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
       var g = helper.generateG(margin);
       helper.appendAxes(g);
       helper.appendTitle(g, graphSize.width, "Tendances du taux de criminalité par catégorie selon la période de l'année");
-      var viz2Data = preproc.getViz2Data(data, chosenSeasons, SEASONS);
+      var viz2Data = preproc.getViz2Data(data, SEASONS);
       viz2.updateXScale(xBandScale, viz2Data, graphSize.width - padding, util.range);
       viz2.updateYScale(yLinearScale, viz2Data, graphSize.height, SEASONS);
       viz1.drawXAxis(xBandScale, graphSize.height);
@@ -12488,7 +12488,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "50284" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "51411" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

@@ -30,7 +30,7 @@ import * as d3Chromatic from 'd3-scale-chromatic'
   const SEASONS = {Winter: "Hiver", Spring: "Printemps", Summer: "Été", Autumn: "Automne"}
   const MONTH_NAMES = ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"]
 
-  var chosenSeasons = {Hiver: true, Printemps: true, Été: true, Automne: true}
+  var chosenSeasons = {Winter: true, Spring: true, Summer: true, Autumn: true}
   var currentViz = 0;
 
   const xBandScale = d3.scaleBand().padding(0.25).paddingInner(0.25)
@@ -62,17 +62,17 @@ import * as d3Chromatic from 'd3-scale-chromatic'
      *   This function handles the buttons click.
      */
     function setClickHandlerSummer () {
-      d3.select('#summer-button').on('click', () => { chosenSeasons.Été = !chosenSeasons.Été; buildViz2() } )
+      d3.select('#summer-button').on('click', () => { chosenSeasons.Summer = !chosenSeasons.Summer; buildViz2() } )
       setHoverHandlerSummer()
     }
 
     function setHoverHandlerSummer() {
       d3.select('#summer-button').on('mouseover', () => { 
-        if (chosenSeasons.Été) document.getElementById('summer-button').style.backgroundColor = 'rgba(44, 160, 44, .25)'
+        if (chosenSeasons.Summer) document.getElementById('summer-button').style.backgroundColor = 'rgba(44, 160, 44, .25)'
         else document.getElementById('summer-button').style.backgroundColor = '#2ca02c'
       } )
       d3.select('#summer-button').on('mouseleave', () => { 
-        if (!chosenSeasons.Été) document.getElementById('summer-button').style.backgroundColor = 'rgba(44, 160, 44, .25)'
+        if (!chosenSeasons.Summer) document.getElementById('summer-button').style.backgroundColor = 'rgba(44, 160, 44, .25)'
         else document.getElementById('summer-button').style.backgroundColor = '#2ca02c' } )
     }
 
@@ -80,17 +80,17 @@ import * as d3Chromatic from 'd3-scale-chromatic'
      *   This function handles the buttons click.
      */
     function setClickHandlerSpring () {
-      d3.select('#spring-button').on('click', () => { chosenSeasons.Printemps = !chosenSeasons.Printemps; buildViz2() } )
+      d3.select('#spring-button').on('click', () => { chosenSeasons.Spring = !chosenSeasons.Spring; buildViz2() } )
       setHoverHandlerSpring()
     }
 
     function setHoverHandlerSpring() {
       d3.select('#spring-button').on('mouseover', () => { 
-        if (chosenSeasons.Printemps) document.getElementById('spring-button').style.backgroundColor = 'rgba(255, 127, 14, .25)'
+        if (chosenSeasons.Spring) document.getElementById('spring-button').style.backgroundColor = 'rgba(255, 127, 14, .25)'
         else document.getElementById('spring-button').style.backgroundColor = '#ff7f0e'
       } )
       d3.select('#spring-button').on('mouseleave', () => { 
-        if (!chosenSeasons.Printemps) document.getElementById('spring-button').style.backgroundColor = 'rgba(255, 127, 14, .25)'
+        if (!chosenSeasons.Spring) document.getElementById('spring-button').style.backgroundColor = 'rgba(255, 127, 14, .25)'
         else document.getElementById('spring-button').style.backgroundColor = '#ff7f0e' } )
     }
 
@@ -98,17 +98,17 @@ import * as d3Chromatic from 'd3-scale-chromatic'
      *   This function handles the buttons click.
      */
     function setClickHandlerWinter () {
-      d3.select('#winter-button').on('click', () => { chosenSeasons.Hiver = !chosenSeasons.Hiver; buildViz2() } )
+      d3.select('#winter-button').on('click', () => { chosenSeasons.Winter = !chosenSeasons.Winter; buildViz2() } )
       setHoverHandlerWinter()
     }
 
     function setHoverHandlerWinter() {
       d3.select('#winter-button').on('mouseover', () => { 
-        if (chosenSeasons.Hiver) document.getElementById('winter-button').style.backgroundColor = 'rgba(31, 119, 180, .25)'
+        if (chosenSeasons.Winter) document.getElementById('winter-button').style.backgroundColor = 'rgba(31, 119, 180, .25)'
         else document.getElementById('winter-button').style.backgroundColor = '#1f77b4'
       } )
       d3.select('#winter-button').on('mouseleave', () => { 
-        if (!chosenSeasons.Hiver) document.getElementById('winter-button').style.backgroundColor = 'rgba(31, 119, 180, .25)'
+        if (!chosenSeasons.Winter) document.getElementById('winter-button').style.backgroundColor = 'rgba(31, 119, 180, .25)'
         else document.getElementById('winter-button').style.backgroundColor = '#1f77b4' } )
     }
 
@@ -116,17 +116,17 @@ import * as d3Chromatic from 'd3-scale-chromatic'
      *   This function handles the buttons click.
      */
     function setClickHandlerFall () {
-      d3.select('#fall-button').on('click', () => { chosenSeasons.Automne = !chosenSeasons.Automne; buildViz2() } )
+      d3.select('#fall-button').on('click', () => { chosenSeasons.Autumn = !chosenSeasons.Autumn; buildViz2() } )
       setHoverHandlerFall()
     }
 
     function setHoverHandlerFall() {
       d3.select('#fall-button').on('mouseover', () => { 
-        if (chosenSeasons.Automne) document.getElementById('fall-button').style.backgroundColor = 'rgba(214, 39, 40, .25)'
+        if (chosenSeasons.Autumn) document.getElementById('fall-button').style.backgroundColor = 'rgba(214, 39, 40, .25)'
         else document.getElementById('fall-button').style.backgroundColor = '#d62728'
       } )
       d3.select('#fall-button').on('mouseleave', () => { 
-        if (!chosenSeasons.Automne) document.getElementById('fall-button').style.backgroundColor = 'rgba(214, 39, 40, .25)'
+        if (!chosenSeasons.Autumn) document.getElementById('fall-button').style.backgroundColor = 'rgba(214, 39, 40, .25)'
         else document.getElementById('fall-button').style.backgroundColor = '#d62728' } )
     }
     
@@ -220,7 +220,7 @@ import * as d3Chromatic from 'd3-scale-chromatic'
       helper.appendAxes(g)
       helper.appendTitle(g, graphSize.width, "Tendances du taux de criminalité par catégorie selon la période de l'année")
 
-      var viz2Data = preproc.getViz2Data(data, chosenSeasons, SEASONS)
+      var viz2Data = preproc.getViz2Data(data, SEASONS)
 
       viz2.updateXScale(xBandScale, viz2Data, graphSize.width - padding, util.range)
       viz2.updateYScale(yLinearScale, viz2Data, graphSize.height, SEASONS)
