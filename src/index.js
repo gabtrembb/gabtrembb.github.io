@@ -38,7 +38,7 @@ import * as d3Chromatic from 'd3-scale-chromatic'
   const yBandScale = d3.scaleBand().padding(0.2)
   const yLinearScale = d3.scaleLinear()
   const colorScaleOrdinal = d3.scaleOrdinal()
-  const colorScaleSequential = d3.scaleSequential(d3Chromatic.interpolateYlGnBu)
+  const colorScaleSequential = d3.scaleSequential(d3Chromatic.interpolateReds)
 
   d3.csv('./interventionscitoyendo.csv', d3.autoType).then(function (data) {
     preproc.filterCrimeTypeName(data);
@@ -257,7 +257,14 @@ import * as d3Chromatic from 'd3-scale-chromatic'
 
       viz3.setColorScaleDomain(colorScaleSequential, viz3Data)
 
+      legend.initGradientViz3(colorScaleSequential)
+      legend.initLegendBarViz3()
+      legend.initLegendAxisViz3()
+      legend.drawViz3(-60, margin.top - 25, graphSize.height - 10, 15, 'url(#gradient)', colorScaleSequential)
+
       viz3.updateRects(xBandScale, yBandScale, colorScaleSequential, viz3Data)
+
+      hover.setRectHandlerViz3(xBandScale, yBandScale, hover.rectSelectedViz3, hover.rectUnselectedViz3, hover.selectTicksViz3, hover.unselectTicksViz3)
 
       document.getElementById('season-buttons-container').style.display = 'none'
    }

@@ -61,11 +61,14 @@
  * @param {*} colorScale The color scale used to set the rectangles' colors
  */
  export function updateRects (xScale, yScale, colorScale, viz3Data) {
-  d3.select('#graph-g').selectAll().data(viz3Data).join('rect')
+  d3.select('#graph-g').selectAll().data(viz3Data).join('g')
+  .attr('class', 'rect-g')
+  .append('rect')
   .attr('x', function(d){return xScale(d.timePeriod)})
   .attr('y', function(d){return yScale(d.type)})
   .attr('width', xScale.bandwidth())
   .attr('height', yScale.bandwidth())
   .style('fill', function(d){return colorScale(d.count)})
 }
+
 
