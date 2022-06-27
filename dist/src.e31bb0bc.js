@@ -190,8 +190,6 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.filterCrimeTypeName = filterCrimeTypeName;
 exports.filterDataByDateAndCrimeType = filterDataByDateAndCrimeType;
-exports.fillMissingData = fillMissingData;
-exports.getSeason = getSeason;
 exports.getTypes = getTypes;
 exports.getTimePeriods = getTimePeriods;
 exports.keepChosenSeasons = keepChosenSeasons;
@@ -233,7 +231,7 @@ function filterCrimeTypeName(data) {
  * Get filtered data with crime type and date. (Is the base for every viz preproc)
  *
  * @param {object[]} data The data to filter
- * @returns {object[]} The filtered data in this form: [{type: string, date: Date}, ...]
+ * @returns {object[]} The filtered data in this form: [{type: string, date: Date, timePeriod: string}, ...]
  */
 
 
@@ -249,74 +247,14 @@ function filterDataByDateAndCrimeType(data) {
     });
   });
   return filteredData;
-} //viz3
-
-
-function fillMissingData(viz3Data, crimeTypes, timePeriods) {
-  crimeTypes.forEach(function (crimeType) {
-    timePeriods.forEach(function (timePeriod) {
-      var isInData = false;
-      viz3Data.forEach(function (line) {
-        if (line.type == crimeType && line.timePeriod == timePeriod) {
-          isInData = true;
-        }
-      });
-      if (!isInData) viz3Data.push({
-        type: crimeType,
-        timePeriod: timePeriod,
-        count: 0
-      });
-    });
-  });
 }
+/**
+ * Get all possible crime types.
+ *
+ * @param {object[]} data The data process
+ * @returns {string[]} array of every crime type
+ */
 
-function getSeason(date, seasons) {
-  var day = date.getDate();
-  var month = date.getMonth() + 1;
-
-  switch (true) {
-    case MONTHS.June < month && month < MONTHS.September:
-      return seasons.Summer;
-
-    case MONTHS.September < month && month < MONTHS.December:
-      return seasons.Autumn;
-
-    case MONTHS.March < month && month < MONTHS.June:
-      return seasons.Spring;
-
-    case MONTHS.January <= month && month < MONTHS.March:
-      return seasons.Winter;
-
-    case month == MONTHS.June:
-      if (day >= 21) {
-        return seasons.Summer;
-      } else {
-        return seasons.Spring;
-      }
-
-    case month == MONTHS.September:
-      if (day >= 21) {
-        return seasons.Autumn;
-      } else {
-        return seasons.Summer;
-      }
-
-    case month == MONTHS.March:
-      if (day >= 21) {
-        return seasons.Autumn;
-      } else {
-        return seasons.Summer;
-      }
-
-    case month == MONTHS.December:
-      if (day >= 21) {
-        return seasons.Winter;
-      } else {
-        return seasons.Autumn;
-      }
-
-  }
-}
 
 function getTypes(data) {
   var types = [];
@@ -325,6 +263,13 @@ function getTypes(data) {
   });
   return types;
 }
+/**
+ * Get all possible time periods
+ *
+ * @param {object[]} data The data process
+ * @returns {string[]} array of every time period
+ */
+
 
 function getTimePeriods(data) {
   var timePeriods = [];
@@ -333,6 +278,15 @@ function getTimePeriods(data) {
   });
   return timePeriods;
 }
+/**
+ * Filters the data to return a count of 0 for unchosen seasons
+ *
+ * @param {object[]} viz2Data The data process
+ * @param {object} chosenSeasons struct: {Winter: bool, Spring: bool, Summer: bool, Autumn: bool} representing which seasons must be in the chart
+ * @param {object} SEASONS struct: {Winter: string, Spring: string, Summer: string, Autumn: string} representing all the possible seasons and their french name
+ * @returns {object[]} filtered data
+ */
+
 
 function keepChosenSeasons(viz2Data, chosenSeasons, SEASONS) {
   var filteredData = [];
@@ -359,36 +313,11 @@ function keepChosenSeasons(viz2Data, chosenSeasons, SEASONS) {
   });
   return filteredData;
 }
-
-function sortViz4Data(viz4Data) {
-  viz4Data.forEach(function (yearlyData) {
-    yearlyData.dateInfos.sort(function (a, b) {
-      return a.date - b.date;
-    });
-  });
-}
-
-function filterViz4Data(viz4Data) {
-  viz4Data.forEach(function (yearlyData) {
-    var newDateInfos = [];
-    yearlyData.dateInfos.forEach(function (month, monthIndex) {
-      var monthMax = d3.max(month);
-      var day = month.indexOf(monthMax);
-      var date = new Date(0, monthIndex, day);
-      newDateInfos.push({
-        date: date,
-        count: monthMax
-      });
-    });
-    yearlyData.dateInfos = newDateInfos;
-  });
-} ////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 /**
  * Get the viz1 data properly formated.
  *
  * @param {object[]} data The data to filter 
- * @returns {object[]} The filtered data in this form: [{year: num, volDeVéhiculeÀMoteur: num, Méfait: num, ...}, ...]
+ * @returns {object[]} The filtered data in this form: [{year: num, vol de véhicule à moteur: num, Méfait: num, Vols qualifiés: num, ...}, ...]
  */
 
 
@@ -418,7 +347,7 @@ function getViz1Data(data) {
  * Get the viz2 data properly formated.
  *
  * @param {object[]} data The data to filter
- * @returns {object[]} The filtered data in this form: [{year: num, volDeVéhiculeÀMoteur: num, Méfait: num, ...}, ...]
+ * @returns {object[]} The filtered data in this form: [{type: string, Hiver: num, Printemps: num, Été: num, Automne: num}, ...]
  */
 
 
@@ -445,7 +374,9 @@ function getViz2Data(data, SEASONS) {
  * Get the viz3 data properly formated.
  *
  * @param {object[]} data The data to filter
- * @returns {object[]} The filtered data in this form: [{year: num, volDeVéhiculeÀMoteur: num, Méfait: num, ...}, ...]
+ * @param {string[]} TYPES array of every crime type
+ * @param {string[]} TIME_PERIODS array of every time period
+ * @returns {object[]} The filtered data in this form: [{type: string, timePeriod: string, count: num}, ...]
  */
 
 
@@ -472,12 +403,11 @@ function getViz3Data(data, TYPES, TIME_PERIODS) {
  * Get the viz4 data properly formated.
  *
  * @param {object[]} data The data to filter
- * @returns {object[]} The filtered data in this form: [{year: num, volDeVéhiculeÀMoteur: num, Méfait: num, ...}, ...]
+ * @returns {object[]} The filtered data in this form: [{year: num, dateInfos: [{date: Date, count: num}, ...]}, ...]
  */
 
 
 function getViz4Data(data) {
-  //modifier pour max de chaque mois
   var viz4Data = [];
   data.forEach(function (crime) {
     var index = indexOf(viz4Data, 'year', crime.date.getFullYear());
@@ -528,6 +458,124 @@ function getViz5Data(data) {
   return viz5Data;
 }
 /**
+ * Fills the viz3Data with counts of 0 for every type and period that has no count.
+ *
+ * @param {object[]} viz3Data The data to filter
+ * @param {object[]} TYPES All the possible crime types
+ * @param {object[]} TIME_PERIODS All the possible time periods
+ */
+
+
+function fillMissingData(viz3Data, TYPES, TIME_PERIODS) {
+  TYPES.forEach(function (crimeType) {
+    TIME_PERIODS.forEach(function (timePeriod) {
+      var isInData = false;
+      viz3Data.forEach(function (line) {
+        if (line.type == crimeType && line.timePeriod == timePeriod) {
+          isInData = true;
+        }
+      });
+      if (!isInData) viz3Data.push({
+        type: crimeType,
+        timePeriod: timePeriod,
+        count: 0
+      });
+    });
+  });
+}
+/**
+ * Get the season of a date.
+ *
+ * @param {Date} date The date to get the season of
+ * @param {object} SEASONS All the possible seasons
+ * @return {object} Season of the date
+ */
+
+
+function getSeason(date, seasons) {
+  var day = date.getDate();
+  var month = date.getMonth() + 1;
+
+  switch (true) {
+    case MONTHS.June < month && month < MONTHS.September:
+      return seasons.Summer;
+
+    case MONTHS.September < month && month < MONTHS.December:
+      return seasons.Autumn;
+
+    case MONTHS.March < month && month < MONTHS.June:
+      return seasons.Spring;
+
+    case MONTHS.January <= month && month < MONTHS.March:
+      return seasons.Winter;
+
+    case month == MONTHS.June:
+      if (day >= 21) {
+        return seasons.Summer;
+      } else {
+        return seasons.Spring;
+      }
+
+    case month == MONTHS.September:
+      if (day >= 21) {
+        return seasons.Autumn;
+      } else {
+        return seasons.Summer;
+      }
+
+    case month == MONTHS.March:
+      if (day >= 21) {
+        return seasons.Autumn;
+      } else {
+        return seasons.Summer;
+      }
+
+    case month == MONTHS.December:
+      if (day >= 21) {
+        return seasons.Winter;
+      } else {
+        return seasons.Autumn;
+      }
+
+  }
+}
+/**
+ * Sorts the viz4Data so that the dates are in chronogical order
+ *
+ * @param {object[]} viz4Data The viz4 data to sort
+ */
+
+
+function sortViz4Data(viz4Data) {
+  viz4Data.forEach(function (yearlyData) {
+    yearlyData.dateInfos.sort(function (a, b) {
+      return a.date - b.date;
+    });
+  });
+}
+/**
+ * Modifies the viz4 data to keep most criminal date per month only
+ *
+ * @param {object[]} viz4Data The viz4 data to filter
+ */
+
+
+function filterViz4Data(viz4Data) {
+  viz4Data.forEach(function (yearlyData) {
+    var newDateInfos = [];
+    yearlyData.dateInfos.forEach(function (month, monthIndex) {
+      var monthMax = d3.max(month);
+      var day = month.indexOf(monthMax);
+      var date = new Date(0, monthIndex, day);
+      newDateInfos.push({
+        date: date,
+        count: monthMax
+      });
+    });
+    yearlyData.dateInfos = newDateInfos;
+  });
+}
+/**
  * Get index of a value in an object array.
  *
  * @param {object[]} array array to search in
@@ -561,6 +609,12 @@ function indexOfTwoProperties(array, property1, value1, property2, value2) {
   });
   return valueIndex;
 }
+/**
+ * Initialize a 2D array representing a year--> arr[month][day]
+ *
+ * @returns {num[]} year array containing 0 in each position
+ */
+
 
 function initYearArray() {
   var arr = new Array(12);
