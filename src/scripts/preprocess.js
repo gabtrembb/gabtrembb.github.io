@@ -260,7 +260,7 @@ function getSeason (date, seasons) {
 }
 
 /**
- * Sorts the viz4Data so that the dates are in chronogical order
+ * Sorts the viz4Data so that the dates are in chronogical order and year too.
  *
  * @param {object[]} viz4Data The viz4 data to sort
  */
@@ -268,6 +268,7 @@ function sortViz4Data(viz4Data) {
   viz4Data.forEach(yearlyData => {
     yearlyData.dateInfos.sort((a, b) => {return a.date - b.date})
   });
+  viz4Data.sort((a, b) => { return a.year - b.year })
 }
 
 /**
