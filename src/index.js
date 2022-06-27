@@ -46,6 +46,12 @@ import * as d3Chromatic from 'd3-scale-chromatic'
     const TYPES = preproc.getTypes(data);  
     const TIME_PERIODS = preproc.getTimePeriods(data);
 
+    const viz1Data = preproc.getViz1Data(data);
+    const viz2Data = preproc.getViz2Data(data, SEASONS);
+    const viz3Data = preproc.getViz3Data(data, TYPES, TIME_PERIODS);
+    const viz4Data = preproc.getViz4Data(data);
+    const viz5Data = preproc.getViz5Data(data);
+
     setSizing()
     setClickHandlerViz1()
     setClickHandlerViz2()
@@ -194,8 +200,6 @@ import * as d3Chromatic from 'd3-scale-chromatic'
       helper.appendAxes(g)
       helper.appendTitle(g, (graphSize.width-padding)/2, -20, 'Tendances du taux de criminalité par année')
 
-      const viz1Data = preproc.getViz1Data(data)
-
       viz1.updateXScale(xBandScale, viz1Data, graphSize.width - padding)
       viz1.updateYScale(yLinearScale, viz1Data, graphSize.height)
 
@@ -220,8 +224,6 @@ import * as d3Chromatic from 'd3-scale-chromatic'
       helper.appendAxes(g)
       helper.appendTitle(g, (graphSize.width-padding)/2, -20, "Tendances du taux de criminalité par catégorie selon la période de l'année")
 
-      var viz2Data = preproc.getViz2Data(data, SEASONS)
-
       viz2.updateXScale(xBandScale, viz2Data, graphSize.width - padding, util.range)
       viz2.updateYScale(yLinearScale, viz2Data, graphSize.height, SEASONS)
 
@@ -232,8 +234,8 @@ import * as d3Chromatic from 'd3-scale-chromatic'
 
       viz2.createGroups(viz2Data)
 
-      viz2Data = preproc.keepChosenSeasons(viz2Data, chosenSeasons, SEASONS)
-      viz2.drawBars(yLinearScale, xBandScale, colorScaleOrdinal, viz2Data, SEASONS)
+      const filteredViz2Data = preproc.keepChosenSeasons(viz2Data, chosenSeasons, SEASONS)
+      viz2.drawBars(yLinearScale, xBandScale, colorScaleOrdinal, filteredViz2Data, SEASONS)
 
       document.getElementById('season-buttons-container').style.display = 'inline'
    }
@@ -246,8 +248,6 @@ import * as d3Chromatic from 'd3-scale-chromatic'
       const g = helper.generateG({top: margin.top + 30, right: margin.right, left: margin.left, bottom: margin.bottom})
       helper.appendAxes(g)
       helper.appendTitle(g, (graphSize.width)/2, -50, "Taux et types de crimes par période")
-
-      var viz3Data = preproc.getViz3Data(data, TYPES, TIME_PERIODS)
 
       viz3.updateXScale(xBandScale, TIME_PERIODS, graphSize.width, util.range)
       viz3.updateYScale(yBandScale, TYPES, graphSize.height)
@@ -272,8 +272,6 @@ import * as d3Chromatic from 'd3-scale-chromatic'
       helper.appendAxes(g)
       helper.appendTitle(g, graphSize.width/2, -20, "Taux de criminalité annuel")
 
-      var viz4Data = preproc.getViz4Data(data)
-
       viz4.updateXScale(xTimeScale, viz4Data, graphSize.width)
       viz4.updateYScale(yLinearScale, viz4Data, graphSize.height)
 
@@ -296,8 +294,6 @@ import * as d3Chromatic from 'd3-scale-chromatic'
       const g = helper.generateG(margin)
       helper.appendAxes(g)
       helper.appendTitle(g, (graphSize.width-padding)/2, -20, "Tendances du taux de criminalité par catégorie")
-
-      var viz5Data = preproc.getViz5Data(data)
 
       viz2.updateXScale(xBandScale, viz5Data, graphSize.width - padding, util.range)
       viz5.updateYScale(yLinearScale, viz5Data, graphSize.height)
