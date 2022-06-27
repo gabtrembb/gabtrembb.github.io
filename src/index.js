@@ -282,6 +282,8 @@ import * as d3Chromatic from 'd3-scale-chromatic'
 
       viz4.drawLines(xTimeScale, yLinearScale, colorScaleOrdinal, viz4Data)
 
+      legend.drawLegendViz4(colorScaleOrdinal, g, graphSize.width)
+
       document.getElementById('season-buttons-container').style.display = 'none'
    }
 
@@ -303,7 +305,9 @@ import * as d3Chromatic from 'd3-scale-chromatic'
 
       viz1.setColorScaleDomain(colorScaleOrdinal, [2015, 2016, 2017, 2018, 2019, 2020, 2021])
 
-      viz5.drawBars(yLinearScale, xBandScale, colorScaleOrdinal, viz5Data)    
+      viz5.drawBars(yLinearScale, xBandScale, colorScaleOrdinal, viz5Data)   
+      
+      legend.drawLegend(colorScaleOrdinal, g, graphSize.width)
       
       document.getElementById('season-buttons-container').style.display = 'none'
    }
