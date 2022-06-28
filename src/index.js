@@ -39,7 +39,7 @@ import * as d3Chromatic from 'd3-scale-chromatic'
   const yBandScale = d3.scaleBand().padding(0.2)
   const yLinearScale = d3.scaleLinear()
   const colorScaleOrdinal = d3.scaleOrdinal()
-  const colorScaleSequential = d3.scaleSequential(d3Chromatic.interpolateReds)
+  const colorScaleSequential = d3.scaleSequential().interpolator(d3.interpolateRgb('#dec23a', 'red'))
 
   d3.csv('./interventionscitoyendo.csv', d3.autoType).then(function (data) {
     preproc.filterCrimeTypeName(data);

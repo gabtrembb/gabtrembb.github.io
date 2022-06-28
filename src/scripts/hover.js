@@ -40,8 +40,9 @@ export function rectSelectedViz3 (element, xScale, yScale) {
   .attr('transform', 'translate(' + element.getBoundingClientRect().width / 2 + ','+ element.getBoundingClientRect().height / 2 + ')')
   .text(function(d){return d.count})
   .style('dominant-baseline', 'central')
-  .style('fill', function(d){return d.count > 5000? 'white': 'black'})
+  .style('fill', 'black')
   .attr('pointer-events', 'none')
+  .attr('font-weight', 'bold')
 
   d3.select(element).style('opacity', 0.75)
 }
