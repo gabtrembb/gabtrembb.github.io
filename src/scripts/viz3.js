@@ -27,7 +27,7 @@
  *  @param {*} xScale The scale to use to draw the axis
  */
  export function drawXAxis (xScale) {
-  d3.select('.x.axis').call(d3.axisTop(xScale).tickFormat(x => x))
+  d3.select('.x.axis').call(d3.axisTop(xScale).tickFormat(x => x)).call(g => g.select(".domain").remove())
 }
 
 /**
@@ -37,7 +37,7 @@
  * @param {number} width The width of the graphic
  */
  export function drawYAxis (yScale, width) {
-  d3.select('#graph-g').selectAll('.y.axis').attr('transform', 'translate('+ width +', 0)').call(d3.axisRight().scale(yScale))
+  d3.select('#graph-g').selectAll('.y.axis').attr('transform', 'translate('+ width +', 0)').call(d3.axisRight().scale(yScale)).call(g => g.select(".domain").remove())
 }
 
 /**
