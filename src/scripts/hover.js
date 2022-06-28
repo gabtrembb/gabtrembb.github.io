@@ -121,7 +121,7 @@ export function getMaxPoint(data) {
 
 export function tooltipViz4(data) {
   var tipContent = '<div style=margin:5px>Année: <span style=color:' + data.color + '>' + data.year + '</span></div>'
-  tipContent += '<div style=margin:5px>Journee: <span>' + data.dateInfo.date.getDate() + ' ' + MONTH_NAMES[data.dateInfo.date.getMonth()] + '</span></div>'
+  tipContent += '<div style=margin:5px>Journée: <span>' + data.dateInfo.date.getDate() + ' ' + MONTH_NAMES[data.dateInfo.date.getMonth()] + '</span></div>'
   tipContent += '<div style=margin:5px>Nombre de crimes: <span>' + data.dateInfo.count + '</span></div>'
   return tipContent
 }
