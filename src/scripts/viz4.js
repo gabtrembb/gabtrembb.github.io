@@ -48,9 +48,10 @@
 
   d3.select('#graph-g').selectAll().data(viz4Data).join('g')
   .append('path')
+  .attr('class', 'lines')
   .attr('fill', 'none')
   .attr('stroke', d => colorScale(d.year))
-  .attr('stroke-width', 2)
+  .attr('stroke-width', 5)
   .attr('d', function(d) {return line(d.dateInfos)})
   
 }

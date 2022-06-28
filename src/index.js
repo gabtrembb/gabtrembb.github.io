@@ -10,6 +10,7 @@ import * as viz5 from './scripts/viz5.js'
 import * as legend from './scripts/legend.js'
 import * as hover from './scripts/hover.js'
 import * as util from './scripts/util.js'
+import d3Tip from 'd3-tip'
 
 import * as d3Chromatic from 'd3-scale-chromatic'
 
@@ -290,6 +291,10 @@ import * as d3Chromatic from 'd3-scale-chromatic'
       viz4.drawLines(xTimeScale, yLinearScale, colorScaleOrdinal, viz4Data)
 
       legend.drawLegendViz4(colorScaleOrdinal, g, graphSize.width)
+
+      const tip = d3Tip().attr('class', 'd3-tip').html(function(d) { return hover.tooltipViz4(d) })
+      g.call(tip)
+      hover.selectLines(xTimeScale, yLinearScale, colorScaleOrdinal, tip)
 
       document.getElementById('season-buttons-container').style.display = 'none'
    }

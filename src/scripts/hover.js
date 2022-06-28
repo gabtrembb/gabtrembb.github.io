@@ -1,5 +1,7 @@
 import { style } from "d3";
 
+const MONTH_NAMES = ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"]
+
 /**
  * Sets up an event handler for when the mouse enters and leaves the squares
  * in the heatmap. When the square is hovered, it enters the "selected" state.
@@ -81,4 +83,45 @@ export function selectTicksViz3 (name, year) {
  */
 export function unselectTicksViz3 () {
   d3.selectAll('.tick').select('text').attr('font-weight', 'normal')
+}
+
+/* Viz4 hover */
+export function selectLines(xScale, yScale, colorScale, tip) {
+  d3.select('#graph-g').selectAll('.lines').on('mouseover', function(d) { 
+    d3.select('#graph-g').selectAll('.lines').attr('opacity', 0.25)
+    d3.select(this).attr('opacity', 1)
+    d3.select('#graph-g')
+      .append('circle')
+      .attr('fill', colorScale(d.year))
+      .attr('fill-opacity', 0.5)
+      .attr('stroke', colorScale(d.year))
+      .attr('cx', xScale(getMaxPoint(d).date))
+      .attr('cy', yScale(getMaxPoint(d).count))
+      .attr('r', 10)
+      tip.show({year: d.year, dateInfo: getMaxPoint(d), color: colorScale(d.year)}, this)
+    })
+   .on('mouseleave', function() {
+    d3.select('#graph-g').selectAll('.lines').attr('opacity', 1)
+    d3.select('#graph-g').selectAll('circle').remove()
+    tip.hide(this)
+   })
+}
+
+export function getMaxPoint(data) {
+  var max = 0
+  var maxDay = {}
+  data.dateInfos.forEach(element => {
+    if (element.count > max) {
+      max = element.count
+      maxDay = element
+    }
+  });
+  return maxDay
+}
+
+export function tooltipViz4(data) {
+  var tipContent = '<div style=margin:5px>Année: <span style=color:' + data.color + '>' + data.year + '</span></div>'
+  tipContent += '<div style=margin:5px>Journee: <span>' + data.dateInfo.date.getDate() + ' ' + MONTH_NAMES[data.dateInfo.date.getMonth()] + '</span></div>'
+  tipContent += '<div style=margin:5px>Nombre de crimes: <span>' + data.dateInfo.count + '</span></div>'
+  return tipContent
 }

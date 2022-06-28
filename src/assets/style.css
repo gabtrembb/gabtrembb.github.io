@@ -173,3 +173,14 @@ button {
     transform-origin: center;
     stroke : black;
 }
+
+.d3-tip {
+    line-height: 1;
+    font-weight: bold;
+    font-size: large;
+    padding: 12px;
+    background: black;
+    color: #fff;
+    border-radius: 2px;
+    pointer-events: none;
+  }
