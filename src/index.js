@@ -65,6 +65,8 @@ import * as d3Chromatic from 'd3-scale-chromatic'
     setClickHandlerWinter()
     setClickHandlerFall()
 
+    buildViz1()
+
     /**
      *   This function handles the buttons click.
      */
