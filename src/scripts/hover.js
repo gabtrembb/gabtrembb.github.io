@@ -86,7 +86,12 @@ export function unselectTicksViz3 () {
   d3.selectAll('.tick').select('text').attr('font-weight', 'normal')
 }
 
-/* Viz1 hover */
+/**
+ * Assigns the tooltip to the hover of the bars.
+ *
+ * @param {*} tip The tooltip to show the data when hovering
+ * @param {*} colorScale The scale for the color of the crimes
+ */
 export function hoverViz1(tip, colorScale) {
   d3.select('#graph-g').selectAll('rect').on('mouseover', function(d) {
     tip.show({crimes: d.data, color: colorScale}, this)
@@ -94,6 +99,11 @@ export function hoverViz1(tip, colorScale) {
   .on('mouseleave', function() { tip.hide(this) })
 }
 
+/**
+ * The tooltip body.
+ *
+ * @param {*} data The crimes data.
+ */
 export function tooltipViz1(data) {
   var total = data.crimes['Infractions entrainant la mort'] + 
               data.crimes['Introduction'] +
@@ -118,7 +128,12 @@ export function tooltipViz1(data) {
   return tipContent
 }
 
-/* Viz2 hover */
+/**
+ * Assigns the tooltip to the hover of the bars.
+ *
+ * @param {string} tip The tooltip to show the data when hovering
+ * @param {number} colorScale The scale for the color of the crimes
+ */
 export function hoverViz2(tip, colorScale) {
   d3.select('#graph-g').selectAll('rect').on('mouseover', function(d) {
     tip.show({seasons: d.data, color: colorScale}, this)
@@ -126,6 +141,11 @@ export function hoverViz2(tip, colorScale) {
   .on('mouseleave', function() { tip.hide(this) })
 }
 
+/**
+ * The tooltip body.
+ *
+ * @param {*} data The seasons data.
+ */
 export function tooltipViz2(data) {
   var total = data.seasons['Hiver'] + 
               data.seasons['Printemps'] +
@@ -153,7 +173,14 @@ export function tooltipViz2(data) {
   return tipContent
 }
 
-/* Viz4 hover */
+/**
+ * Assigns the tooltip to the hover of the lines.
+ *
+ * @param {*} xScale The scale of the count
+ * @param {*} yScale The scale of the dates
+ * @param {*} colorScale The scale for the color of the years
+ * @param {*} tip The tooltip to show the data when hovering
+ */
 export function selectLines(xScale, yScale, colorScale, tip) {
   d3.select('#graph-g').selectAll('.lines').on('mouseover', function(d) { 
     d3.select('#graph-g').selectAll('.lines').attr('opacity', 0.25)
@@ -175,6 +202,11 @@ export function selectLines(xScale, yScale, colorScale, tip) {
    })
 }
 
+/**
+ * Gets the date with the maximum amount of crimes.
+ *
+ * @param {*} data The dataset with the days of the year
+ */
 export function getMaxPoint(data) {
   var max = 0
   var maxDay = {}
@@ -187,6 +219,11 @@ export function getMaxPoint(data) {
   return maxDay
 }
 
+/**
+ * The tooltip body.
+ *
+ * @param {*} data The dataset containing the infos of the year.
+ */
 export function tooltipViz4(data) {
   var tipContent = '<div style=margin:5px>Année: <span style=color:' + data.color + '>' + data.year + '</span></div>'
   tipContent += '<div style=margin:5px>Journée: <span>' + data.dateInfo.date.getDate() + ' ' + MONTH_NAMES[data.dateInfo.date.getMonth()] + '</span></div>'
@@ -194,7 +231,12 @@ export function tooltipViz4(data) {
   return tipContent
 }
 
-/* Viz5 hover */
+/**
+ * Assigns the tooltip to the hover of the bars.
+ *
+ * @param {*} colorScale The scale for the color of the years
+ * @param {*} tip The tooltip to show the data when hovering
+ */
 export function hoverViz5(tip, colorScale) {
   d3.select('#graph-g').selectAll('rect').on('mouseover', function(d) {
     tip.show({years: d.data, color: colorScale}, this)
@@ -202,6 +244,11 @@ export function hoverViz5(tip, colorScale) {
   .on('mouseleave', function() { tip.hide(this) })
 }
 
+/**
+ * The tooltip body.
+ *
+ * @param {*} data The dataset containing the infos of the year.
+ */
 export function tooltipViz5(data) {
   var total = data.years['2015'] + 
               data.years['2016'] +
