@@ -183,4 +183,8 @@ button {
     color: #fff;
     border-radius: 2px;
     pointer-events: none;
-  }
+}
+
+.bar-chart-tip {
+    font-weight: normal;
+}

@@ -86,6 +86,73 @@ export function unselectTicksViz3 () {
   d3.selectAll('.tick').select('text').attr('font-weight', 'normal')
 }
 
+/* Viz1 hover */
+export function hoverViz1(tip, colorScale) {
+  d3.select('#graph-g').selectAll('rect').on('mouseover', function(d) {
+    tip.show({crimes: d.data, color: colorScale}, this)
+  })
+  .on('mouseleave', function() { tip.hide(this) })
+}
+
+export function tooltipViz1(data) {
+  var total = data.crimes['Infractions entrainant la mort'] + 
+              data.crimes['Introduction'] +
+              data.crimes['Méfait'] +
+              data.crimes['Vol dans / sur véhicule à moteur'] +
+              data.crimes['Vol de véhicule à moteur'] +
+              data.crimes['Vols qualifiés']
+
+  var tipContent = '<div style=margin:5px class="bar-chart-tip">Vol dans / sur véhicule à moteur: <span style=color:' + data.color('Vol dans / sur véhicule à moteur') + '>' 
+                 + data.crimes['Vol dans / sur véhicule à moteur'] + '</span></div>'
+  tipContent += '<div style=margin:5px class="bar-chart-tip">Introduction: <span style=color:' + data.color('Introduction') + '>' 
+              + data.crimes['Introduction'] + '</span></div>'
+  tipContent += '<div style=margin:5px class="bar-chart-tip">Vols qualifiés: <span style=color:' + data.color('Vols qualifiés') + '>' 
+              + data.crimes['Vols qualifiés'] + '</span></div>'
+  tipContent += '<div style=margin:5px class="bar-chart-tip">Méfait: <span style=color:' + data.color('Méfait') + '>' 
+              + data.crimes['Méfait'] + '</span></div>'
+  tipContent += '<div style=margin:5px class="bar-chart-tip">Vol de véhicule à moteur: <span style=color:' + data.color('Vol de véhicule à moteur') + '>' 
+              + data.crimes['Vol de véhicule à moteur'] + '</span></div>'
+  tipContent += '<div style=margin:5px class="bar-chart-tip">Infractions entrainant la mort: <span style=color:' + data.color('Infractions entrainant la mort') + '>' 
+              + data.crimes['Infractions entrainant la mort'] + '</span></div>'
+  tipContent += '<div style=margin:5px>Total: <span>' + total + '</span></div>'
+  return tipContent
+}
+
+/* Viz2 hover */
+export function hoverViz2(tip, colorScale) {
+  d3.select('#graph-g').selectAll('rect').on('mouseover', function(d) {
+    tip.show({seasons: d.data, color: colorScale}, this)
+  })
+  .on('mouseleave', function() { tip.hide(this) })
+}
+
+export function tooltipViz2(data) {
+  var total = data.seasons['Hiver'] + 
+              data.seasons['Printemps'] +
+              data.seasons['Été'] +
+              data.seasons['Automne']
+  
+  var tipContent = ''
+  if (data.seasons['Automne'] > 0) {
+    tipContent += '<div style=margin:5px class="bar-chart-tip">Automne: <span style=color:' + data.color('Automne') + '>' 
+                + data.seasons['Automne'] + '</span></div>'
+  } 
+  if (data.seasons['Été'] > 0) {
+    tipContent += '<div style=margin:5px class="bar-chart-tip">Été: <span style=color:' + data.color('Été') + '>' 
+                + data.seasons['Été'] + '</span></div>'
+  } 
+  if (data.seasons['Printemps'] > 0) {
+    tipContent += '<div style=margin:5px class="bar-chart-tip">Printemps: <span style=color:' + data.color('Printemps') + '>' 
+              + data.seasons['Printemps'] + '</span></div>'
+  } 
+  if (data.seasons['Hiver'] > 0) {
+    tipContent += '<div style=margin:5px class="bar-chart-tip">Hiver: <span style=color:' + data.color('Hiver') + '>' 
+              + data.seasons['Hiver'] + '</span></div>'
+  }
+  tipContent += '<div style=margin:5px>Total: <span>' + total + '</span></div>'
+  return tipContent
+}
+
 /* Viz4 hover */
 export function selectLines(xScale, yScale, colorScale, tip) {
   d3.select('#graph-g').selectAll('.lines').on('mouseover', function(d) { 
@@ -124,5 +191,40 @@ export function tooltipViz4(data) {
   var tipContent = '<div style=margin:5px>Année: <span style=color:' + data.color + '>' + data.year + '</span></div>'
   tipContent += '<div style=margin:5px>Journée: <span>' + data.dateInfo.date.getDate() + ' ' + MONTH_NAMES[data.dateInfo.date.getMonth()] + '</span></div>'
   tipContent += '<div style=margin:5px>Nombre de crimes: <span>' + data.dateInfo.count + '</span></div>'
+  return tipContent
+}
+
+/* Viz5 hover */
+export function hoverViz5(tip, colorScale) {
+  d3.select('#graph-g').selectAll('rect').on('mouseover', function(d) {
+    tip.show({years: d.data, color: colorScale}, this)
+  })
+  .on('mouseleave', function() { tip.hide(this) })
+}
+
+export function tooltipViz5(data) {
+  var total = data.years['2015'] + 
+              data.years['2016'] +
+              data.years['2017'] +
+              data.years['2018'] +
+              data.years['2019'] +
+              data.years['2020'] +
+              data.years['2021']
+
+  var tipContent = '<div style=margin:5px class="bar-chart-tip">2015: <span style=color:' + data.color('2015') + '>' 
+                 + data.years['2015'] + '</span></div>'
+  tipContent += '<div style=margin:5px class="bar-chart-tip">2016: <span style=color:' + data.color('2016') + '>' 
+              + data.years['2016'] + '</span></div>'
+  tipContent += '<div style=margin:5px class="bar-chart-tip">2017: <span style=color:' + data.color('2017') + '>' 
+              + data.years['2017'] + '</span></div>'
+  tipContent += '<div style=margin:5px class="bar-chart-tip">2018: <span style=color:' + data.color('2018') + '>' 
+              + data.years['2018'] + '</span></div>'
+  tipContent += '<div style=margin:5px class="bar-chart-tip">2019: <span style=color:' + data.color('2019') + '>' 
+              + data.years['2019'] + '</span></div>'
+  tipContent += '<div style=margin:5px class="bar-chart-tip">2020: <span style=color:' + data.color('2020') + '>' 
+              + data.years['2020'] + '</span></div>'
+  tipContent += '<div style=margin:5px class="bar-chart-tip">2021: <span style=color:' + data.color('2021') + '>' 
+              + data.years['2021'] + '</span></div>'
+  tipContent += '<div style=margin:5px>Total: <span>' + total + '</span></div>'
   return tipContent
 }

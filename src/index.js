@@ -213,6 +213,10 @@ import * as d3Chromatic from 'd3-scale-chromatic'
 
       legend.drawLegend(colorScaleOrdinal, g, graphSize.width)
 
+      const tip1 = d3Tip().attr('class', 'd3-tip').html(function(d) { return hover.tooltipViz1(d) })
+      g.call(tip1)
+      hover.hoverViz1(tip1, colorScaleOrdinal)
+
       document.getElementById('season-buttons-container').style.display = 'none'
     }
     /**
@@ -237,6 +241,10 @@ import * as d3Chromatic from 'd3-scale-chromatic'
 
       const filteredViz2Data = preproc.keepChosenSeasons(viz2Data, chosenSeasons, SEASONS)
       viz2.drawBars(yLinearScale, xBandScale, colorScaleOrdinal, filteredViz2Data, SEASONS)
+
+      const tip2 = d3Tip().attr('class', 'd3-tip').html(function(d) { return hover.tooltipViz2(d) })
+      g.call(tip2)
+      hover.hoverViz2(tip2, colorScaleOrdinal)
 
       document.getElementById('season-buttons-container').style.display = 'inline'
    }
@@ -320,6 +328,10 @@ import * as d3Chromatic from 'd3-scale-chromatic'
       viz5.drawBars(yLinearScale, xBandScale, colorScaleOrdinal, viz5Data)   
       
       legend.drawLegend(colorScaleOrdinal, g, graphSize.width)
+
+      const tip5 = d3Tip().attr('class', 'd3-tip').html(function(d) { return hover.tooltipViz5(d) })
+      g.call(tip5)
+      hover.hoverViz5(tip5, colorScaleOrdinal)
       
       document.getElementById('season-buttons-container').style.display = 'none'
    }
