@@ -1,0 +1,16 @@
+{
+  "name": "gabtrembb.github.io",
+  "version": "1.0.0",
+  "description": "Website for fun",
+  "main": "index.js",
+  "scripts": {
+    "start": "npm run open",
+    "open": "concurrently \"http-server -a localhost -p 3000\" \"open http://localhost:3000/build\""
+  },
+  "author": "Gabrielle Tremblay",
+  "license": "ISC",
+  "devDependencies": {
+    "concurrently": "^8.2.2",
+    "http-server": "^14.1.1"
+  }
+}
