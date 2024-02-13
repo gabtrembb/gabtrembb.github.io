@@ -2,7 +2,7 @@
   "name": "gabtrembb.github.io",
   "version": "1.0.0",
   "description": "Website for fun",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
     "start": "concurrently \"http-server -a localhost -p 8080\" \"open http://localhost:8080\"",
     "open": "concurrently \"http-server -a localhost -p 8080\" \"open http://localhost:8080\""
