@@ -28,7 +28,7 @@ To get more help on the Angular CLI use `ng help` or go check out the [Angular C
 
 # Deploy
 Run $ng deploy --base-href=https://gabtrembb.github.io/
+ou mabye $ng build --configuration production
 
 # Host locally
 Run $ng serve
-ou mabye $ng build --configuration production

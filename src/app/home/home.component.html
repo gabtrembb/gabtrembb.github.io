@@ -1,2 +1,12 @@
+<p>
+    <mat-toolbar color="primary">
+        <mat-toolbar-row>
+            <span class="title-center">Bets & Polls</span>
+        </mat-toolbar-row>
+    </mat-toolbar>
+</p>
 <h1>Polls</h1>
+<li *ngFor="let poll of pollService.polls;">
+    <button mat-button>{{poll.name}}</button>
+</li>
 <button (click)="createNewPoll()" mat-button>Create New</button>
