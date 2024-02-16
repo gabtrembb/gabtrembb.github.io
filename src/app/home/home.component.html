@@ -4,9 +4,15 @@
             <span class="title-center">Bets & Polls</span>
         </mat-toolbar-row>
     </mat-toolbar>
+    <mat-toolbar class="sub-toolbar">
+        <span>Polls</span>
+    </mat-toolbar>
 </p>
-<h1>POLLS</h1>
-<li *ngFor="let poll of pollService.polls;">
-    <button mat-button>{{poll.name}}</button>
-</li>
-<button (click)="createNewPoll()" mat-button>Create New</button>
+<div class="buttons">
+    <div *ngFor="let poll of pollService.polls;">
+        <div>
+            <button mat-stroked-button class="poll-button">{{poll.name}}</button>
+        </div>
+    </div>
+    <button (click)="createNewPoll()" mat-raised-button class="create-new-button" color="accent">Create New</button>
+</div>

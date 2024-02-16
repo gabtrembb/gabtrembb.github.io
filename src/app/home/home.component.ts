@@ -3,12 +3,13 @@ import { PollCreationComponent } from '../poll-creation/poll-creation.component'
 import { MatDialog } from '@angular/material/dialog';
 import { PollService } from '../services/poll.service';
 import { CommonModule } from '@angular/common';
-import {MatToolbarModule} from '@angular/material/toolbar'; 
+import {MatToolbarModule} from '@angular/material/toolbar';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule, MatToolbarModule],
+  imports: [CommonModule, MatToolbarModule, MatButtonModule],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css'
 })

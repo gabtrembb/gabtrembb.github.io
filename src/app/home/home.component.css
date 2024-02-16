@@ -3,3 +3,40 @@
     text-align: center;
     font-size: 40px;
 }
+
+.sub-toolbar {
+    flex: 1 1 auto;
+    text-align: left;
+    font-size: 20px;
+    background: #cccccc;
+    min-height: 20px;
+}
+
+.buttons {
+    flex: 1 1 auto;
+    margin: auto;
+    text-align: center; 
+}
+
+.poll-button {
+    width: 99%;
+    min-height: 60px;
+    font-size: 25px;
+    border: 1px solid #4054b4 !important;
+    margin-bottom:10px;
+}
+
+.create-new-button {
+    width: 100%;
+    min-height: 60px;
+    font-size: 25px;
+}
+
+.poll-button:hover { 
+    background-color: #4054b4;
+    color: white;
+}
+
+.create-new-button:hover { 
+    background-color: #4054b4;
+}
