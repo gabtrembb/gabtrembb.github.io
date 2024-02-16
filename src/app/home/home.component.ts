@@ -19,8 +19,8 @@ export class HomeComponent {
 
   createNewPoll() {
     let dialogRef = this.dialog.open(PollCreationComponent, {
-      height: '400px',
-      width: '600px',
+      height: '98%',
+      width: '98%',
     });
   }
 }
