@@ -1,4 +1,4 @@
-<p>Poll Creation</p>
+<h1 class="title">Poll Creation</h1>
 <mat-form-field>
     <mat-label>Poll Name</mat-label>
     <input matInput required>
@@ -13,3 +13,22 @@
     <span matTextPrefix>$&nbsp;</span>
     <span matTextSuffix>.00</span>
 </mat-form-field>
+<div *ngFor="let question of this.poll.questions; index as i">
+    <p>#{{i + 1}}.</p>
+    <mat-form-field>
+        <mat-label>Question</mat-label>
+        <input matInput required>
+    </mat-form-field>
+    <mat-form-field>
+        <mat-label>Answer Type</mat-label>
+        <mat-select [(value)]="question.type">
+          <mat-option value="QuestionType.TrueFalse">True/False</mat-option>
+          <mat-option value="QuestionType.Multiple">Multiple Choices</mat-option>
+          <mat-option value="QuestionType.ClosestNumber">Closest Number</mat-option>
+          <mat-option value="QuestionType.Text">Text</mat-option>
+        </mat-select>
+    </mat-form-field>
+</div>
+<button (click)="addQuestion()" mat-raised-button>Add Question</button>
+<button mat-raised-button color="warn">Cancel</button>
+<button mat-raised-button color="primary">Create Poll</button>
