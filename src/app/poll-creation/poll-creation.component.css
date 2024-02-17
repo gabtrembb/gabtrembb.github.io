@@ -72,3 +72,20 @@ input[matinput]::-webkit-inner-spin-button {
 .question-row {
     display: table-row;
 }
+
+.delete-button {
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-end;
+    align-content: flex-end;
+    margin-right: 5px;
+    margin-bottom: 5px;
+}
+
+.remove-choice-button {
+    margin-left: 5px;
+}
+
+.add-choice-button {
+    margin-left: 80px;
+}

@@ -20,12 +20,9 @@
         </div>
         <div style="flex-grow: 1;">
             <mat-form-field style="padding-top: 10px; width: 98%;">
-                <mat-label>Question</mat-label>
+                <mat-label>Question {{i + 1}}</mat-label>
                 <textarea matInput [(ngModel)]="question.question"></textarea>
             </mat-form-field>
-            <button mat-fab color="primary" (click)="deleteQuestion(i)">
-                <mat-icon>delete</mat-icon>
-            </button>
             <mat-form-field>
                 <mat-label>Answer Type</mat-label>
                 <mat-select [(ngModel)]="question.type">
@@ -37,12 +34,20 @@
             </mat-form-field>
             <div *ngIf="isMultiple(question.type)">
                 <div *ngFor="let choice of question.choices; index as j; trackBy: trackByIndex">
-                    <mat-form-field>
-                        <mat-label>Choice {{j + 1}}</mat-label>
-                        <input matInput required [(ngModel)]="question.choices[j]">
-                    </mat-form-field>
+                    <div>
+                        <mat-form-field>
+                            <mat-label>Choice {{j + 1}}</mat-label>
+                            <input matInput [(ngModel)]="question.choices[j]">
+                        </mat-form-field>
+                        <button mat-mini-fab class="remove-choice-button" color="warn" (click)="removeChoice(i, j)"> X </button>
+                    </div>
                 </div>
-                <!-- add +/- button -->
+                <button mat-mini-fab class="add-choice-button" color="primary" (click)="addChoice(i)"> + </button>
+            </div>
+            <div class="delete-button">
+                <button mat-fab color="warn" (click)="deleteQuestion(i)">
+                    <mat-icon>delete</mat-icon>
+                </button>
             </div>
         </div>
     </div>

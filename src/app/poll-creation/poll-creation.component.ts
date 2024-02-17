@@ -38,6 +38,21 @@ export class PollCreationComponent {
     }
   }
 
+  addChoice(questionIndex : number)
+  {
+    this.poll.questions[questionIndex].choices.push("");
+  }
+
+  removeChoice(questionIndex : number, choiceIndex : number)
+  {
+    if(questionIndex < this.poll.questions.length && 
+      choiceIndex < this.poll.questions[questionIndex].choices.length &&
+      this.poll.questions[questionIndex].choices.length > 2)
+    {
+      this.poll.questions[questionIndex].choices.splice(choiceIndex, 1);
+    }
+  }
+
   cancel() {
     this.dialogRef.close();
   }
