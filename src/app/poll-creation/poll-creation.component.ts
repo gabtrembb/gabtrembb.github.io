@@ -17,15 +17,20 @@ import { MatDialogRef } from '@angular/material/dialog';
   styleUrl: './poll-creation.component.css'
 })
 export class PollCreationComponent {
-  public poll : Poll = {name:"", password:"", money: 0, questions: [{question: "", type: QuestionType.TrueFalse}]};
+  public poll : Poll = {name:"", password:"", money: 10, questions: [{question: "", type: QuestionType.TrueFalse, choices: ["", ""]}]};
 
   constructor(public dialogRef: MatDialogRef<PollCreationComponent>) { }
 
   addQuestion() {
-    this.poll.questions.push({question: "", type: QuestionType.TrueFalse});
+    this.poll.questions.push({question: "", type: QuestionType.TrueFalse, choices: ["", ""]});
   }
 
   cancel() {
     this.dialogRef.close();
+  }
+
+  isMultiple(type : QuestionType) : boolean
+  {
+    return type===QuestionType.Multiple;
   }
 }

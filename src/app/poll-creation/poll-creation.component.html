@@ -19,19 +19,28 @@
             <p class="question-number">#{{i + 1}}.</p>
         </div>
         <div style="flex-grow: 1;">
-            <mat-form-field style="padding-top: 10px; width: 99%;">
+            <mat-form-field style="padding-top: 10px; width: 98%;">
                 <mat-label>Question</mat-label>
                 <textarea matInput [(ngModel)]="question.question"></textarea>
             </mat-form-field>
             <mat-form-field>
                 <mat-label>Answer Type</mat-label>
-                <mat-select [(value)]="question.type">
-                  <mat-option value="QuestionType.TrueFalse">True/False</mat-option>
-                  <mat-option value="QuestionType.Multiple">Multiple Choices</mat-option>
-                  <mat-option value="QuestionType.ClosestNumber">Closest Number</mat-option>
-                  <mat-option value="QuestionType.Text">Text</mat-option>
+                <mat-select [(ngModel)]="question.type">
+                  <mat-option [value]="0">True/False</mat-option>
+                  <mat-option [value]="1">Multiple Choices</mat-option>
+                  <mat-option [value]="2">Closest Number</mat-option>
+                  <mat-option [value]="3">Text</mat-option>
                 </mat-select>
             </mat-form-field>
+            <div *ngIf="isMultiple(question.type)">
+                <div *ngFor="let choice of question.choices; index as j">
+                    <mat-form-field>
+                        <mat-label>Answer {{j + 1}}</mat-label>
+                        <input matInput>
+                    </mat-form-field>
+                </div>
+                <!-- add +/- button -->
+            </div>
         </div>
     </div>
 </div>

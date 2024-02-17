@@ -33,6 +33,7 @@
 
 .button-row {
     display: table-cell;
+    margin-bottom: 10px;
 }
 
 .right-align {

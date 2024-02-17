@@ -8,7 +8,7 @@
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "serve:ssr:Bets": "node dist/bets/server/server.mjs",
-    "host": "ng serve --host 192.168.2.87"
+    "deploy": "ng deploy --base-href=https://gabtrembb.github.io/"
   },
   "private": true,
   "dependencies": {
