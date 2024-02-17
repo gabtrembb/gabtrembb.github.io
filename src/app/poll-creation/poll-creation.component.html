@@ -23,6 +23,9 @@
                 <mat-label>Question</mat-label>
                 <textarea matInput [(ngModel)]="question.question"></textarea>
             </mat-form-field>
+            <button mat-fab color="primary" (click)="deleteQuestion(i)">
+                <mat-icon>delete</mat-icon>
+            </button>
             <mat-form-field>
                 <mat-label>Answer Type</mat-label>
                 <mat-select [(ngModel)]="question.type">
@@ -33,10 +36,10 @@
                 </mat-select>
             </mat-form-field>
             <div *ngIf="isMultiple(question.type)">
-                <div *ngFor="let choice of question.choices; index as j">
+                <div *ngFor="let choice of question.choices; index as j; trackBy: trackByIndex">
                     <mat-form-field>
-                        <mat-label>Answer {{j + 1}}</mat-label>
-                        <input matInput>
+                        <mat-label>Choice {{j + 1}}</mat-label>
+                        <input matInput required [(ngModel)]="question.choices[j]">
                     </mat-form-field>
                 </div>
                 <!-- add +/- button -->

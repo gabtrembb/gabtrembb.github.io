@@ -8,11 +8,12 @@ import { QuestionType } from '../structs/question';
 import { CommonModule } from '@angular/common';
 import {MatSelectModule} from '@angular/material/select';
 import { MatDialogRef } from '@angular/material/dialog';
+import {MatIconModule} from '@angular/material/icon';
 
 @Component({
   selector: 'app-poll-creation',
   standalone: true,
-  imports: [MatFormFieldModule, MatInputModule, FormsModule, ReactiveFormsModule, MatButtonModule, CommonModule, MatSelectModule],
+  imports: [MatFormFieldModule, MatInputModule, FormsModule, ReactiveFormsModule, MatButtonModule, CommonModule, MatSelectModule, MatIconModule],
   templateUrl: './poll-creation.component.html',
   styleUrl: './poll-creation.component.css'
 })
@@ -21,8 +22,20 @@ export class PollCreationComponent {
 
   constructor(public dialogRef: MatDialogRef<PollCreationComponent>) { }
 
+  trackByIndex(i : number) {
+    return i;
+  }
+
   addQuestion() {
     this.poll.questions.push({question: "", type: QuestionType.TrueFalse, choices: ["", ""]});
+  }
+
+  deleteQuestion(index : number)
+  {
+    if(this.poll.questions.length > 1 && index < this.poll.questions.length)
+    {
+      this.poll.questions.splice(index, 1);
+    }
   }
 
   cancel() {
