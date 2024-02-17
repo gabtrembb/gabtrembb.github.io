@@ -7,6 +7,7 @@ import {MatButtonModule} from '@angular/material/button';
 import { QuestionType } from '../structs/question';
 import { CommonModule } from '@angular/common';
 import {MatSelectModule} from '@angular/material/select';
+import { MatDialogRef } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-poll-creation',
@@ -18,7 +19,13 @@ import {MatSelectModule} from '@angular/material/select';
 export class PollCreationComponent {
   public poll : Poll = {name:"", password:"", money: 0, questions: [{question: "", type: QuestionType.TrueFalse}]};
 
+  constructor(public dialogRef: MatDialogRef<PollCreationComponent>) { }
+
   addQuestion() {
     this.poll.questions.push({question: "", type: QuestionType.TrueFalse});
+  }
+
+  cancel() {
+    this.dialogRef.close();
   }
 }
