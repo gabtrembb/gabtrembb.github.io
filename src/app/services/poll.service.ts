@@ -3,8 +3,8 @@ import { Poll } from '../structs/poll';
 import { io } from "socket.io-client";
 import { BehaviorSubject } from 'rxjs';
 
-const WEBSOCKET_DOMAIN = "http://localhost:3000";
-//TODO: AMAZON DOMAIN
+//const WEBSOCKET_DOMAIN = "http://localhost:3000";
+const WEBSOCKET_DOMAIN = "http://18.189.157.179:3000";
 const socket = io(WEBSOCKET_DOMAIN);
 
 @Injectable({
@@ -36,6 +36,10 @@ export class PollService {
     
     socket.on("disconnect", () => {
       console.log("disconnect");
+    });
+
+    socket.on("error", (error) => {
+      console.log(error);
     });
   }
 
