@@ -20,7 +20,7 @@ import { Question } from '../structs/question';
   styleUrl: './poll-creation.component.css'
 })
 export class PollCreationComponent {
-  public poll : Poll = {name:"", password:"", money: 10, questions: [{question: "", type: QuestionType.TrueFalse, choices: ["", ""]}]};
+  public poll : Poll = {id : "", name:"", password:"", money: 10, questions: [{question: "", type: QuestionType.TrueFalse, choices: ["", ""]}]};
 
   constructor(public dialogRef: MatDialogRef<PollCreationComponent>, public pollService: PollService) { }
 
@@ -96,7 +96,7 @@ export class PollCreationComponent {
       }
     }
 
-    this.pollService.polls.push(this.poll);
+    this.pollService.createPoll(this.poll);
     this.dialogRef.close();
   }
 }

@@ -1,19 +1,42 @@
 import { Injectable } from '@angular/core';
 import { Poll } from '../structs/poll';
-import { OnlineService } from './online.service';
+import { io } from "socket.io-client";
+import { BehaviorSubject } from 'rxjs';
+
+const WEBSOCKET_DOMAIN = "http://localhost:3000";
+//TODO: AMAZON DOMAIN
+const socket = io(WEBSOCKET_DOMAIN);
 
 @Injectable({
   providedIn: 'root'
 })
 export class PollService {
-  public polls : Poll[] = [{name: "Poll test", password: "gab", money: 10.0, questions:[]}, {name: "Another poll", password: "gab", money: 10.0, questions:[]}, {name: "Last poll test", password: "gab", money: 10.0, questions:[]}] 
+  private pollNames : BehaviorSubject<{id : string, name : string}[]> = new BehaviorSubject<any[]>([]);
+  public pollNames$ = this.pollNames.asObservable();
 
-  constructor(public onlineService: OnlineService) 
+  constructor() 
   { 
+    this.initSocketListeners();
+  }
+
+  private initSocketListeners()
+  {
+    socket.on("connect", () => {
+      console.log("connection");
+      socket.emit('get_poll_names');
+    });
+
+    socket.on("get_poll_names", (pollNames : {id : string, name : string}[]) => {
+      this.pollNames.next(pollNames);
+    });
+    
+    socket.on("disconnect", () => {
+      console.log("disconnect");
+    });
   }
 
   createPoll(poll : Poll)
   {
-    //Poke the server.
+
   }
 }

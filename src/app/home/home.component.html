@@ -9,7 +9,7 @@
     </mat-toolbar>
 </p>
 <div class="buttons">
-    <div *ngFor="let poll of pollService.polls;">
+    <div *ngFor="let poll of this.pollNames;">
         <div>
             <button mat-stroked-button class="poll-button">{{poll.name}}</button>
         </div>
