@@ -26,6 +26,10 @@ export class PollService {
       socket.emit('get_poll_names');
     });
 
+    socket.on("request_get_poll_names", () => {
+      socket.emit('get_poll_names');
+    });
+
     socket.on("get_poll_names", (pollNames : {id : string, name : string}[]) => {
       this.pollNames.next(pollNames);
     });
@@ -37,6 +41,6 @@ export class PollService {
 
   createPoll(poll : Poll)
   {
-
+    socket.emit('create_poll', poll);
   }
 }
